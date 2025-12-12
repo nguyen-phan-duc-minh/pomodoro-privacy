@@ -22,11 +22,6 @@ class AchievementsScreen extends StatelessWidget {
       ),
       body: Consumer2<AchievementProvider, StatisticsProvider>(
         builder: (context, achievementProvider, statsProvider, _) {
-          final unlockedCount = achievementProvider.unlockedCount;
-          final totalCount = achievementProvider.totalAchievements;
-          final percentage = achievementProvider.completionPercentage;
-
-          // Tính toán các giá trị hiện tại
           final totalPomodoros = _getTotalPomodoros(statsProvider);
           final currentStreak = statsProvider.currentStreak;
           final totalStudyMinutes = statsProvider.getTotalStudyMinutes();
@@ -34,72 +29,6 @@ class AchievementsScreen extends StatelessWidget {
           return ListView(
             padding: const EdgeInsets.all(16),
             children: [
-              // Progress overview
-              Container(
-                padding: const EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [
-                      Theme.of(context).colorScheme.primaryContainer,
-                      Theme.of(context).colorScheme.primaryContainer.withOpacity(0.7),
-                    ],
-                  ),
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                child: Column(
-                  children: [
-                    Text(
-                      'Tiến độ hoàn thành',
-                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18,
-                            color: Theme.of(context).colorScheme.onPrimaryContainer,
-                          ),
-                    ),
-                    const SizedBox(height: 12),
-                    Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        SizedBox(
-                          width: 120,
-                          height: 120,
-                          child: CircularProgressIndicator(
-                            value: percentage,
-                            strokeWidth: 12,
-                            backgroundColor: Colors.white.withValues(alpha: 0.3),
-                            valueColor: AlwaysStoppedAnimation(
-                              Theme.of(context).colorScheme.primary,
-                            ),
-                          ),
-                        ),
-                        Column(
-                          children: [
-                            Text(
-                              '${(percentage * 100).toInt()}%',
-                              style: TextStyle(
-                                fontSize: 36,
-                                fontWeight: FontWeight.bold,
-                                color: Theme.of(context).colorScheme.onPrimaryContainer,
-                              ),
-                            ),
-                            Text(
-                              '$unlockedCount/$totalCount',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w500,
-                                color: Theme.of(context).colorScheme.onPrimaryContainer.withValues(alpha: 0.8),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 14),
-
-              // Danh sách achievements theo category
               ..._buildAchievementsByCategory(
                 context,
                 achievementProvider,
@@ -165,7 +94,7 @@ class AchievementsScreen extends StatelessWidget {
                 currentValue = totalStudyMinutes;
                 break;
               case AchievementCategory.special:
-                currentValue = 0; // Special achievements không có progress
+                currentValue = 0; 
                 break;
               case AchievementCategory.general:
                 currentValue = 0;
@@ -231,14 +160,13 @@ class _AchievementCard extends StatelessWidget {
         padding: const EdgeInsets.all(16),
         child: Row(
           children: [
-            // Icon
             Container(
               width: 60,
               height: 60,
               decoration: BoxDecoration(
                 color: isUnlocked
-                    ? const Color(0xFFFFD700) // Vàng gold sáng
-                    : const Color(0xFF9E9E9E), // Xám
+                    ? const Color(0xFFFFD700) 
+                    : const Color(0xFF9E9E9E), 
                 shape: BoxShape.circle,
                 boxShadow: isUnlocked
                     ? [
@@ -270,7 +198,6 @@ class _AchievementCard extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 16),
-            // Content
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

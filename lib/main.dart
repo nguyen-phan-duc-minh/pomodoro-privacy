@@ -9,6 +9,7 @@ import 'providers/task_provider.dart';
 import 'providers/goal_provider.dart';
 import 'providers/achievement_provider.dart';
 import 'providers/break_activities_provider.dart';
+import 'models/pomodoro_session.dart';
 import 'services/audio_service.dart';
 import 'services/notification_service.dart';
 import 'services/widget_service.dart';
@@ -105,9 +106,23 @@ class MyApp extends StatelessWidget {
               };
               
               provider.onBreakActivityNeeded = () {
-                // Callback này được gọi trước onBreakStart để pause và cho user chọn activity
+                // Callback này được gọi khi cần user chọn activity
+                // Timer đã được pause trong _switchToBreak()
+              };
+              
+              provider.onPause = () {
                 try {
-                  provider.pauseSession(); // Pause để user chọn
+                  audioService.stopBackgroundMusic();
+                } catch (e) {
+                  // Ignore errors
+                }
+              };
+              
+              provider.onResume = () {
+                try {
+                  if (provider.currentType == SessionType.study) {
+                    audioService.playBackgroundMusic();
+                  }
                 } catch (e) {
                   // Ignore errors
                 }

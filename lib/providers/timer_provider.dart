@@ -23,6 +23,8 @@ class TimerProvider with ChangeNotifier {
   Function()? onCycleComplete;
   Function(dynamic task)? onTaskCompletionCheck;
   Function()? onBreakActivityNeeded; // Callback để hiện popup chọn activity
+  Function()? onPause; // Callback khi pause
+  Function()? onResume; // Callback khi resume
 
   PomodoroSession? get currentSession => _currentSession;
   StudyTheme? get selectedTheme => _selectedTheme;
@@ -116,6 +118,7 @@ class TimerProvider with ChangeNotifier {
     _timer?.cancel();
     _currentSession = _currentSession!.copyWith(status: SessionStatus.paused);
     _saveSession();
+    onPause?.call(); // Gọi callback để dừng nhạc
     notifyListeners();
   }
 
@@ -123,6 +126,7 @@ class TimerProvider with ChangeNotifier {
     if (_currentSession == null) return;
     
     _currentSession = _currentSession!.copyWith(status: SessionStatus.running);
+    onResume?.call(); // Gọi callback để phát lại nhạc
     _startTimer();
     _saveSession();
     notifyListeners();
@@ -180,15 +184,18 @@ class TimerProvider with ChangeNotifier {
     );
     
     _saveSession();
-    onStudyComplete?.call();
     
-    // Pause timer ngay lập tức để user chọn activity
+    // Pause timer ngay lập tức trước khi gọi callbacks
     _timer?.cancel();
     _currentSession = _currentSession!.copyWith(status: SessionStatus.paused);
+    
+    // Gọi onStudyComplete để phát âm thanh
+    onStudyComplete?.call();
     
     // Gọi callback để hiện popup chọn activity
     onBreakActivityNeeded?.call();
     
+    // Gọi onBreakStart 
     onBreakStart?.call();
     notifyListeners();
   }
