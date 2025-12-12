@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/timer_provider.dart';
+import '../providers/task_provider.dart';
 
 class TimerControls extends StatelessWidget {
   const TimerControls({super.key});
@@ -101,27 +102,100 @@ class TimerControls extends StatelessWidget {
   }
 
   void _showStartDialog(BuildContext context, TimerProvider timerProvider) {
+    final studyMinutes = timerProvider.selectedTheme?.studyMinutes ?? 25;
+    final taskProvider = Provider.of<TaskProvider>(context, listen: false);
+    
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Bắt đầu học'),
+      builder: (dialogContext) => AlertDialog(
+        title: const Text(
+          'Bắt đầu học',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 20,
+          ),
+        ),
         content: Column(
           mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text('Chọn số vòng Pomodoro:'),
-            const SizedBox(height: 16),
+            const Text(
+              'Chọn số vòng:',
+              style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
+            ),
+            const SizedBox(height: 12),
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                for (int i = 1; i <= 4; i++)
-                  _buildCycleButton(context, i, timerProvider),
+                for (int i = 1; i <= 4; i++) ...[
+                  _buildCycleButton(context, i, timerProvider, studyMinutes),
+                  if (i < 4) const SizedBox(width: 16),
+                ],
               ],
             ),
+            if (taskProvider.activeTasks.isNotEmpty) ...[
+              const SizedBox(height: 20),
+              const Text(
+                'Nhiệm vụ (tùy chọn):',
+                style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
+              ),
+              const SizedBox(height: 8),
+              Consumer<TaskProvider>(
+                builder: (context, provider, _) {
+                  return Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey.shade300),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: DropdownButtonHideUnderline(
+                      child: DropdownButton<String?>(
+                        value: provider.activeTask?.id,
+                        isExpanded: true,
+                        padding: const EdgeInsets.symmetric(horizontal: 12),
+                        hint: const Text('Không chọn'),
+                        items: [
+                          const DropdownMenuItem<String?>(
+                            value: null,
+                            child: Text('Không chọn'),
+                          ),
+                          ...provider.activeTasks.map((task) {
+                            return DropdownMenuItem<String?>(
+                              value: task.id,
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: Text(
+                                      task.title,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                  if (task.studyMinutes > 0)
+                                    Text(
+                                      ' ⏱️${task.studyMinutes}p',
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        color: Colors.grey.shade600,
+                                      ),
+                                    ),
+                                ],
+                              ),
+                            );
+                          }),
+                        ],
+                        onChanged: (value) {
+                          provider.setActiveTask(value);
+                        },
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ],
           ],
         ),
         actions: [
           TextButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () => Navigator.pop(dialogContext),
             child: const Text('Hủy'),
           ),
         ],
@@ -129,29 +203,45 @@ class TimerControls extends StatelessWidget {
     );
   }
 
-  Widget _buildCycleButton(BuildContext context, int cycles, TimerProvider timerProvider) {
+  Widget _buildCycleButton(BuildContext context, int cycles, TimerProvider timerProvider, int studyMinutes) {
+    final totalStudyTime = cycles * studyMinutes;
+    
     return InkWell(
       onTap: () {
         timerProvider.startSession(targetCycles: cycles);
         Navigator.pop(context);
       },
-      child: Container(
-        width: 50,
-        height: 50,
-        decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.primary,
-          shape: BoxShape.circle,
-        ),
-        child: Center(
-          child: Text(
-            '$cycles',
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            width: 50,
+            height: 50,
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.primary,
+              shape: BoxShape.circle,
+            ),
+            child: Center(
+              child: Text(
+                '$cycles',
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             ),
           ),
-        ),
+          const SizedBox(height: 6),
+          Text(
+            '${totalStudyTime}p',
+            style: TextStyle(
+              fontSize: 13,
+              fontWeight: FontWeight.w600,
+              color: Theme.of(context).colorScheme.primary,
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -160,7 +250,10 @@ class TimerControls extends StatelessWidget {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Reset phiên học'),
+        title: const Text(
+          'Reset phiên học',
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+        ),
         content: const Text('Bạn có muốn reset phiên học về thời gian ban đầu?'),
         actions: [
           TextButton(

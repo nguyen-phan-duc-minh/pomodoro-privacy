@@ -37,22 +37,20 @@ class PomodoroSession {
 
   double get studyProgress {
     if (studyDuration == 0) return 0;
-    return (elapsedStudyTime % studyDuration) / studyDuration;
+    return elapsedStudyTime / studyDuration;
   }
 
   double get breakProgress {
     if (breakDuration == 0) return 0;
-    return (elapsedBreakTime % breakDuration) / breakDuration;
+    return elapsedBreakTime / breakDuration;
   }
 
   int get remainingStudyTime {
-    final currentCycleTime = elapsedStudyTime % studyDuration;
-    return studyDuration - currentCycleTime;
+    return studyDuration - elapsedStudyTime;
   }
 
   int get remainingBreakTime {
-    final currentCycleTime = elapsedBreakTime % breakDuration;
-    return breakDuration - currentCycleTime;
+    return breakDuration - elapsedBreakTime;
   }
 
   Map<String, dynamic> toJson() {

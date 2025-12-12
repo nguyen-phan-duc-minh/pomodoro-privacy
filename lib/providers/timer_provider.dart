@@ -12,17 +12,25 @@ class TimerProvider with ChangeNotifier {
   Timer? _timer;
   SharedPreferences? _prefs;
   
+  // Activity break tracking
+  String? _currentActivityId;
+  String? _currentActivityName;
+  
   Function()? onStudyStart;
   Function()? onStudyComplete;
   Function()? onBreakStart;
   Function()? onBreakComplete;
   Function()? onCycleComplete;
+  Function(dynamic task)? onTaskCompletionCheck;
+  Function()? onBreakActivityNeeded; // Callback để hiện popup chọn activity
 
   PomodoroSession? get currentSession => _currentSession;
   StudyTheme? get selectedTheme => _selectedTheme;
   bool get isRunning => _currentSession?.status == SessionStatus.running;
   bool get isPaused => _currentSession?.status == SessionStatus.paused;
   bool get isIdle => _currentSession?.status == SessionStatus.idle || _currentSession == null;
+  String? get currentActivityName => _currentActivityName;
+  bool get hasActivity => _currentActivityId != null;
 
   SessionType get currentType => _currentSession?.currentType ?? SessionType.study;
   
@@ -48,6 +56,36 @@ class TimerProvider with ChangeNotifier {
   void setTheme(StudyTheme theme) {
     _selectedTheme = theme;
     notifyListeners();
+  }
+
+  // Set activity cho break time
+  void setBreakActivity(String activityId, String activityName, int durationMinutes) {
+    _currentActivityId = activityId;
+    _currentActivityName = activityName;
+    
+    // Cập nhật break duration thành duration của activity và reset elapsed time
+    if (_currentSession != null) {
+      _currentSession = _currentSession!.copyWith(
+        breakDuration: durationMinutes * 60,
+        elapsedBreakTime: 0, // Reset để bắt đầu đếm lại từ đầu
+      );
+      _saveSession();
+    }
+    notifyListeners();
+  }
+
+  // Bỏ qua activity, dùng break time thông thường
+  void skipBreakActivity() {
+    _currentActivityId = null;
+    _currentActivityName = null;
+    // Không cần thay đổi breakDuration, giữ nguyên theo theme
+    notifyListeners();
+  }
+
+  // Clear activity sau khi hoàn thành
+  void _clearBreakActivity() {
+    _currentActivityId = null;
+    _currentActivityName = null;
   }
 
   Future<void> startSession({int? targetCycles}) async {
@@ -138,9 +176,19 @@ class TimerProvider with ChangeNotifier {
 
     _currentSession = _currentSession!.copyWith(
       currentType: SessionType.breakTime,
+      elapsedBreakTime: 0,
     );
     
+    _saveSession();
     onStudyComplete?.call();
+    
+    // Pause timer ngay lập tức để user chọn activity
+    _timer?.cancel();
+    _currentSession = _currentSession!.copyWith(status: SessionStatus.paused);
+    
+    // Gọi callback để hiện popup chọn activity
+    onBreakActivityNeeded?.call();
+    
     onBreakStart?.call();
     notifyListeners();
   }
@@ -150,19 +198,33 @@ class TimerProvider with ChangeNotifier {
 
     final completedCycles = _currentSession!.completedCycles + 1;
     
+    // Clear activity khi break complete
+    _clearBreakActivity();
+    
     onBreakComplete?.call();
     
     if (completedCycles >= _currentSession!.targetCycles) {
+      // Cập nhật completedCycles và endTime trước khi gọi onCycleComplete
+      _currentSession = _currentSession!.copyWith(
+        completedCycles: completedCycles,
+        status: SessionStatus.completed,
+        endTime: DateTime.now(),
+      );
+      _saveSession(); // Save trước khi gọi callback
       onCycleComplete?.call();
-      stopSession();
+      _timer?.cancel();
+      _currentSession = null;
+      notifyListeners();
       return;
     }
 
     _currentSession = _currentSession!.copyWith(
       currentType: SessionType.study,
       completedCycles: completedCycles,
+      elapsedStudyTime: 0,
     );
     
+    _saveSession();
     onStudyStart?.call();
     notifyListeners();
   }

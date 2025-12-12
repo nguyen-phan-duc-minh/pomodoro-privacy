@@ -22,7 +22,9 @@ class StatisticsProvider with ChangeNotifier {
   }
 
   Future<void> recordSession(PomodoroSession session) async {
-    if (session.status != SessionStatus.completed) return;
+    if (session.status != SessionStatus.completed) {
+      return;
+    }
 
     final studyMinutes = (session.totalStudyTime / 60).round();
     final breakMinutes = (session.totalBreakTime / 60).round();

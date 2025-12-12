@@ -6,6 +6,12 @@ import '../providers/theme_provider.dart';
 import '../providers/timer_provider.dart';
 import '../providers/app_theme_provider.dart';
 import 'timer_screen.dart';
+import 'statistics_screen.dart';
+import 'tasks_screen.dart';
+import 'goals_screen.dart';
+import 'achievements_screen.dart';
+import 'break_activities_screen.dart';
+import 'widget_settings_screen.dart';
 
 class ThemeSelectionScreen extends StatefulWidget {
   const ThemeSelectionScreen({super.key});
@@ -36,6 +42,166 @@ class _ThemeSelectionScreenState extends State<ThemeSelectionScreen> {
     final timerProvider = Provider.of<TimerProvider>(context);
     
     return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        title: Text(
+          'Chọn Theme Học',
+          style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+                color: Theme.of(context).colorScheme.onSurface,
+              ),
+        ),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        leading: Builder(
+          builder: (context) => Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: IconButton(
+              icon: const Icon(Icons.menu),
+              iconSize: 28,
+              color: Theme.of(context).colorScheme.primary,
+              onPressed: () => Scaffold.of(context).openDrawer(),
+              tooltip: 'Menu',
+            ),
+          ),
+        ),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: IconButton(
+              icon: const Icon(Icons.add_circle_rounded),
+              iconSize: 28,
+              color: Theme.of(context).colorScheme.primary,
+              onPressed: () => _showCreateThemeDialog(context),
+              tooltip: 'Tạo theme',
+            ),
+          ),
+        ],
+      ),
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            DrawerHeader(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
+                    Theme.of(context).colorScheme.primary,
+                    Theme.of(context).colorScheme.primary.withValues(alpha: 0.7),
+                  ],
+                ),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Icon(
+                    Icons.timer_outlined,
+                    size: 48,
+                    color: Colors.white,
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    'Pomodoro Study',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            ListTile(
+              leading: const Icon(Icons.task_alt, size: 28),
+              title: const Text('Nhiệm vụ', style: TextStyle(fontSize: 16)),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => const TasksScreen(),
+                  ),
+                );
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.flag_outlined, size: 28),
+              title: const Text('Mục tiêu', style: TextStyle(fontSize: 16)),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => const GoalsScreen(),
+                  ),
+                );
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.emoji_events_outlined, size: 28),
+              title: const Text('Huy hiệu', style: TextStyle(fontSize: 16)),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => const AchievementsScreen(),
+                  ),
+                );
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.local_cafe, size: 28),
+              title: const Text('Hoạt động giải lao', style: TextStyle(fontSize: 16)),
+              subtitle: const Text('Gợi ý khi nghỉ', style: TextStyle(fontSize: 12)),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => const BreakActivitiesScreen(),
+                  ),
+                );
+              },
+            ),
+            const Divider(),
+            ListTile(
+              leading: const Icon(Icons.bar_chart_rounded, size: 28),
+              title: const Text('Thống kê', style: TextStyle(fontSize: 16)),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => const StatisticsScreen(),
+                  ),
+                );
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.widgets, size: 28),
+              title: const Text('Widgets', style: TextStyle(fontSize: 16)),
+              subtitle: const Text('Cài đặt widget', style: TextStyle(fontSize: 12)),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => const WidgetSettingsScreen(),
+                  ),
+                );
+              },
+            ),
+            const Divider(),
+            ListTile(
+              leading: const Icon(Icons.palette_outlined, size: 28),
+              title: const Text('Giao diện', style: TextStyle(fontSize: 16)),
+              onTap: () {
+                Navigator.pop(context);
+                _showAppThemeDialog(context);
+              },
+            ),
+          ],
+        ),
+      ),
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
@@ -53,37 +219,6 @@ class _ThemeSelectionScreenState extends State<ThemeSelectionScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                  children: [
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Chọn Theme Học',
-                            style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                                  fontWeight: FontWeight.bold,
-                                  color: Theme.of(context).colorScheme.onSurface,
-                                ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    IconButton(
-                      icon: const Icon(Icons.palette_outlined),
-                      iconSize: 32,
-                      color: Theme.of(context).colorScheme.primary,
-                      onPressed: () => _showAppThemeDialog(context),
-                    ),
-                    IconButton(
-                      icon: const Icon(Icons.add_circle_rounded),
-                      iconSize: 40,
-                      color: Theme.of(context).colorScheme.primary,
-                      onPressed: () => _showCreateThemeDialog(context),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 6),
                 
                 Expanded(
                   child: ListView.builder(
@@ -335,7 +470,10 @@ void _showDeleteThemeDialog(BuildContext context, StudyTheme theme) {
   showDialog(
     context: context,
     builder: (dialogContext) => AlertDialog(
-      title: const Text('Xóa Theme'),
+      title: const Text(
+        'Xóa Theme',
+        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+      ),
       content: Text('Bạn có chắc muốn xóa theme "${theme.name}"?'),
       actions: [
         TextButton(
@@ -358,7 +496,16 @@ void _showDeleteThemeDialog(BuildContext context, StudyTheme theme) {
             
             if (!context.mounted) return;
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Đã xóa theme!')),
+              SnackBar(
+                content: const Text('Đã xóa theme!'),
+                behavior: SnackBarBehavior.floating,
+                margin: EdgeInsets.only(
+                  top: MediaQuery.of(context).padding.top + 16,
+                  left: 16,
+                  right: 16,
+                ),
+                duration: const Duration(seconds: 2),
+              ),
             );
           },
           style: ElevatedButton.styleFrom(
@@ -385,15 +532,21 @@ void _showEditThemeDialog(BuildContext context, StudyTheme theme) {
     context: context,
     builder: (dialogContext) => StatefulBuilder(
       builder: (context, setState) => AlertDialog(
-        title: const Text('Chỉnh sửa Theme'),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+        title: const Text(
+          'Chỉnh sửa Theme',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 20,
+          ),
+        ),
         content: SizedBox(
-          width: MediaQuery.of(context).size.width * 0.9,
+          width: double.maxFinite,
           child: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                const SizedBox(height: 6),
                 TextField(
                   controller: nameController,
                   decoration: const InputDecoration(
@@ -455,7 +608,16 @@ void _showEditThemeDialog(BuildContext context, StudyTheme theme) {
               if (name.isEmpty || study == null || breakTime == null) {
                 if (!context.mounted) return;
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Vui lòng nhập đầy đủ thông tin!')),
+                  SnackBar(
+                    content: const Text('Vui lòng nhập đầy đủ thông tin!'),
+                    behavior: SnackBarBehavior.floating,
+                    margin: EdgeInsets.only(
+                      top: MediaQuery.of(context).padding.top + 16,
+                      left: 16,
+                      right: 16,
+                    ),
+                    duration: const Duration(seconds: 2),
+                  ),
                 );
                 return;
               }
@@ -485,7 +647,16 @@ void _showEditThemeDialog(BuildContext context, StudyTheme theme) {
 
               if (!context.mounted) return;
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Đã cập nhật theme!')),
+                SnackBar(
+                  content: const Text('Đã cập nhật theme!'),
+                  behavior: SnackBarBehavior.floating,
+                  margin: EdgeInsets.only(
+                    top: MediaQuery.of(context).padding.top + 16,
+                    left: 16,
+                    right: 16,
+                  ),
+                  duration: const Duration(seconds: 2),
+                ),
               );
             },
             child: const Text('Lưu'),
@@ -513,11 +684,14 @@ void _showCreateThemeDialog(BuildContext context) {
           'Tạo Theme Mới',
           style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
         ),
+        contentPadding: const EdgeInsets.fromLTRB(24, 24, 24, 24),
         content: SizedBox(
+          width: double.maxFinite,
           child: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
+              const SizedBox(height: 6),
               TextField(
                 controller: nameController,
                 decoration: const InputDecoration(
@@ -589,7 +763,16 @@ void _showCreateThemeDialog(BuildContext context) {
             onPressed: () async {
               if (nameController.text.trim().isEmpty) {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Vui lòng nhập tên theme')),
+                  SnackBar(
+                    content: const Text('Vui lòng nhập tên theme'),
+                    behavior: SnackBarBehavior.floating,
+                    margin: EdgeInsets.only(
+                      top: MediaQuery.of(context).padding.top + 16,
+                      left: 16,
+                      right: 16,
+                    ),
+                    duration: const Duration(seconds: 2),
+                  ),
                 );
                 return;
               }
@@ -599,14 +782,32 @@ void _showCreateThemeDialog(BuildContext context) {
 
               if (studyMinutes == null || studyMinutes < 1 || studyMinutes > 120) {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Thời gian học phải từ 1-120 phút')),
+                  SnackBar(
+                    content: const Text('Thời gian học phải từ 1-120 phút'),
+                    behavior: SnackBarBehavior.floating,
+                    margin: EdgeInsets.only(
+                      top: MediaQuery.of(context).padding.top + 16,
+                      left: 16,
+                      right: 16,
+                    ),
+                    duration: const Duration(seconds: 2),
+                  ),
                 );
                 return;
               }
 
               if (breakMinutes == null || breakMinutes < 1 || breakMinutes > 60) {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Thời gian nghỉ phải từ 1-60 phút')),
+                  SnackBar(
+                    content: const Text('Thời gian nghỉ phải từ 1-60 phút'),
+                    behavior: SnackBarBehavior.floating,
+                    margin: EdgeInsets.only(
+                      top: MediaQuery.of(context).padding.top + 16,
+                      left: 16,
+                      right: 16,
+                    ),
+                    duration: const Duration(seconds: 2),
+                  ),
                 );
                 return;
               }
@@ -626,7 +827,16 @@ void _showCreateThemeDialog(BuildContext context) {
               
               if (context.mounted) {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Đã tạo theme mới!')),
+                  SnackBar(
+                    content: const Text('Đã tạo theme mới!'),
+                    behavior: SnackBarBehavior.floating,
+                    margin: EdgeInsets.only(
+                      top: MediaQuery.of(context).padding.top + 16,
+                      left: 16,
+                      right: 16,
+                    ),
+                    duration: const Duration(seconds: 2),
+                  ),
                 );
               }
             },
@@ -643,54 +853,73 @@ void _showAppThemeDialog(BuildContext context) {
   
   showDialog(
     context: context,
-    builder: (dialogContext) => AlertDialog(
-      title: const Text('Chọn Giao Diện'),
-      contentPadding: const EdgeInsets.all(20),
-      content: SizedBox(
-        width: MediaQuery.of(context).size.width * 0.9,
+    builder: (dialogContext) => Dialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(24),
         child: Column(
           mainAxisSize: MainAxisSize.min,
-          children: AppTheme.defaultThemes.map((theme) {
-            final isSelected = appThemeProvider.currentTheme.id == theme.id;
-            return Container(
-              margin: const EdgeInsets.only(bottom: 12),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(
-                  color: isSelected ? theme.primaryColor : Colors.grey.shade300,
-                  width: isSelected ? 3 : 1,
-                ),
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Chọn Giao Diện',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
               ),
-              child: ListTile(
-                leading: CircleAvatar(
-                  backgroundColor: theme.primaryColor,
-                  child: Icon(
-                    Icons.palette,
-                    color: Colors.white,
+            ),
+            const SizedBox(height: 20),
+            ...AppTheme.defaultThemes.map((theme) {
+              final isSelected = appThemeProvider.currentTheme.id == theme.id;
+              return Container(
+                margin: const EdgeInsets.only(bottom: 12),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(
+                    color: isSelected ? theme.primaryColor : Colors.grey.shade300,
+                    width: isSelected ? 3 : 1,
                   ),
                 ),
-                title: Text(
-                  theme.name,
-                  style: TextStyle(
-                    fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                child: ListTile(
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                  leading: CircleAvatar(
+                    backgroundColor: theme.primaryColor,
+                    child: const Icon(
+                      Icons.palette,
+                      color: Colors.white,
+                    ),
                   ),
+                  title: Text(
+                    theme.name,
+                    style: TextStyle(
+                      fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                      fontSize: 16,
+                    ),
+                  ),
+                  trailing: isSelected ? const Icon(Icons.check_circle, color: Colors.green) : null,
+                  onTap: () {
+                    appThemeProvider.setTheme(theme);
+                    Navigator.of(dialogContext).pop();
+                  },
                 ),
-                trailing: isSelected ? const Icon(Icons.check_circle, color: Colors.green) : null,
-                onTap: () {
-                  appThemeProvider.setTheme(theme);
-                  Navigator.of(dialogContext).pop();
-                },
+              );
+            }),
+            const SizedBox(height: 16),
+            Align(
+              alignment: Alignment.centerRight,
+              child: TextButton(
+                onPressed: () => Navigator.of(dialogContext).pop(),
+                child: const Text(
+                  'Đóng',
+                  style: TextStyle(fontSize: 16),
+                ),
               ),
-            );
-          }).toList(),
+            ),
+          ],
         ),
       ),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.of(dialogContext).pop(),
-          child: const Text('Đóng'),
-        ),
-      ],
     ),
   );
 }
@@ -749,31 +978,33 @@ class _ColorPickerRow extends StatelessWidget {
           Wrap(
             spacing: 8,
             runSpacing: 8,
-            children: colors.map((c) {
-              final isSelected = c.toARGB32() == color.toARGB32();
-              return GestureDetector(
-              onTap: () => onColorChanged(c),
-              child: Container(
-                width: 36,
-                height: 36,
-                decoration: BoxDecoration(
-                  color: c,
-                  shape: BoxShape.circle,
-                  border: Border.all(
-                    color: isSelected ? Colors.black : Colors.transparent,
-                    width: 3,
+            children: [
+              ...colors.map((c) {
+                final isSelected = c.toARGB32() == color.toARGB32();
+                return GestureDetector(
+                onTap: () => onColorChanged(c),
+                child: Container(
+                  width: 36,
+                  height: 36,
+                  decoration: BoxDecoration(
+                    color: c,
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      color: isSelected ? Colors.black : Colors.transparent,
+                      width: 3,
+                    ),
                   ),
+                  child: isSelected
+                      ? const Icon(
+                          Icons.check,
+                          color: Colors.white,
+                          size: 20,
+                        )
+                      : null,
                 ),
-                child: isSelected
-                    ? const Icon(
-                        Icons.check,
-                        color: Colors.white,
-                        size: 20,
-                      )
-                    : null,
-              ),
-            );
-          }).toList(),
+              );
+            }),
+            ],
         ),
       ],
       ),

@@ -5,7 +5,12 @@ import '../models/pomodoro_session.dart';
 import 'circular_timer_painter.dart';
 
 class TimerDisplay extends StatelessWidget {
-  const TimerDisplay({super.key});
+  final bool focusMode;
+  
+  const TimerDisplay({
+    super.key,
+    this.focusMode = false,
+  });
 
   String _formatTime(int seconds) {
     final minutes = seconds ~/ 60;
@@ -31,21 +36,40 @@ class TimerDisplay extends StatelessWidget {
         final studyProgress = session?.studyProgress ?? 0;
         final breakProgress = session?.breakProgress ?? 0;
 
+        // Focus mode: white text on dark background
+        final primaryColor = focusMode ? Colors.white : Theme.of(context).colorScheme.primary;
+        
         return Container(
           padding: const EdgeInsets.all(20),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               if (session != null)
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 20),
-                  child: Text(
-                    'Vòng ${session.completedCycles + 1}/${session.targetCycles}',
-                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: Theme.of(context).colorScheme.primary,
-                        ),
-                  ),
+                Column(
+                  children: [
+                    Text(
+                      'Vòng ${session.completedCycles + 1}/${session.targetCycles}',
+                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                            fontWeight: FontWeight.bold,
+                            color: primaryColor,
+                          ),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      isStudyPhase 
+                          ? 'HỌC' 
+                          : (timerProvider.currentActivityName ?? 'NGHỈ'),
+                      style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                            fontWeight: FontWeight.bold,
+                            color: focusMode 
+                                ? (isStudyPhase ? Colors.orange : Colors.lightBlue)
+                                : (isStudyPhase ? theme.studyColor : theme.breakColor),
+                            letterSpacing: timerProvider.hasActivity ? 1 : 2,
+                          ),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 20),
+                  ],
                 ),
 
               SizedBox(
@@ -66,52 +90,40 @@ class TimerDisplay extends StatelessWidget {
                       ),
                     ),
 
-                    Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          isStudyPhase ? 'HỌC' : 'NGHỈ',
-                          style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                                fontWeight: FontWeight.bold,
-                                color: isStudyPhase ? theme.studyColor : theme.breakColor,
-                                letterSpacing: 2,
-                              ),
-                        ),
-                        const SizedBox(height: 10),
-                        Text(
-                          _formatTime(remainingTime),
-                          style: Theme.of(context).textTheme.displayLarge?.copyWith(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 72,
-                                color: Theme.of(context).colorScheme.onSurface,
-                              ),
-                        ),
-                        const SizedBox(height: 20),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            _buildLegend(
-                              context,
-                              'Học',
-                              theme.studyColor,
-                              '${theme.studyMinutes}p',
-                            ),
-                            const SizedBox(width: 30),
-                            _buildLegend(
-                              context,
-                              'Nghỉ',
-                              theme.breakColor,
-                              '${theme.breakMinutes}p',
-                            ),
-                          ],
-                        ),
-                      ],
+                    Text(
+                      _formatTime(remainingTime),
+                      style: Theme.of(context).textTheme.displayLarge?.copyWith(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 72,
+                            color: focusMode ? Colors.white : Theme.of(context).colorScheme.onSurface,
+                          ),
                     ),
                   ],
                 ),
               ),
 
-              const SizedBox(height: 40),
+              const SizedBox(height: 20),
+
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  _buildLegend(
+                    context,
+                    'Học',
+                    theme.studyColor,
+                    '${theme.studyMinutes}p',
+                  ),
+                  const SizedBox(width: 30),
+                  _buildLegend(
+                    context,
+                    'Nghỉ',
+                    theme.breakColor,
+                    '${theme.breakMinutes}p',
+                  ),
+                ],
+              ),
+
+              const SizedBox(height: 30),
 
               _buildProgressIndicators(context, theme, studyProgress, breakProgress),
             ],
