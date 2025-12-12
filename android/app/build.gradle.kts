@@ -33,8 +33,8 @@ android {
         applicationId = "com.pomodorostudy.app"
         minSdk = flutter.minSdkVersion
         targetSdk = flutter.targetSdkVersion
-        versionCode = 6
-        versionName = "1.0.6"
+        versionCode = 7
+        versionName = "1.0.7"
         
         multiDexEnabled = true
     }
