@@ -38,9 +38,7 @@ class TimerProvider with ChangeNotifier {
   
   int get remainingTime {
     if (_currentSession == null) return 0;
-    return currentType == SessionType.study
-        ? _currentSession!.remainingStudyTime
-        : _currentSession!.remainingBreakTime;
+    return currentType == SessionType.study ? _currentSession!.remainingStudyTime : _currentSession!.remainingBreakTime;
   }
 
   double get progress {
