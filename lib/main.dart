@@ -17,22 +17,11 @@ import 'screens/theme_selection_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  
   await initializeDateFormatting('vi', null);
-  
-  try {
-    await NotificationService().init();
-  } catch (e) {
-    // Notification service init failed, continue without notifications
-  }
-  
+  try { await NotificationService().init(); } catch (e) {}
   try {
     await WidgetService.init();
-    await WidgetService.registerInteractivity();
-  } catch (e) {
-    // Widget service init failed, continue without widgets
-  }
-  
+    await WidgetService.registerInteractivity(); } catch (e) {}  
   runApp(const MyApp());
 }
 
@@ -43,27 +32,13 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(
-          create: (_) => AppThemeProvider()..init(),
-        ),
-        ChangeNotifierProvider(
-          create: (_) => ThemeProvider()..init(),
-        ),
-        ChangeNotifierProvider(
-          create: (_) => StatisticsProvider()..init(),
-        ),
-        ChangeNotifierProvider(
-          create: (_) => TaskProvider()..init(),
-        ),
-        ChangeNotifierProvider(
-          create: (_) => GoalProvider()..init(),
-        ),
-        ChangeNotifierProvider(
-          create: (_) => BreakActivitiesProvider(),
-        ),
-        ChangeNotifierProvider(
-          create: (_) => AchievementProvider()..init(),
-        ),
+        ChangeNotifierProvider(create: (_) => AppThemeProvider()..init(),),
+        ChangeNotifierProvider(create: (_) => ThemeProvider()..init(),),
+        ChangeNotifierProvider(create: (_) => StatisticsProvider()..init(),),
+        ChangeNotifierProvider(create: (_) => TaskProvider()..init(),),
+        ChangeNotifierProvider(create: (_) => GoalProvider()..init(),),
+        ChangeNotifierProvider(create: (_) => BreakActivitiesProvider(),),
+        ChangeNotifierProvider(create: (_) => AchievementProvider()..init(),),
         ChangeNotifierProvider(
           create: (context) {
             final provider = TimerProvider()..init();
@@ -80,7 +55,6 @@ class MyApp extends StatelessWidget {
                   audioService.playStudyStart();
                   notificationService.showStudyStartNotification();
                   
-                  // Update widget
                   if (provider.currentSession != null && provider.selectedTheme != null) {
                     WidgetService.updateTimer(
                       isRunning: true,
@@ -91,18 +65,14 @@ class MyApp extends StatelessWidget {
                       progress: provider.progress,
                     );
                   }
-                } catch (e) {
-                  // Ignore errors
-                }
+                } catch (e) {}
               };
               
               provider.onStudyComplete = () {
                 try {
                   audioService.playStudyComplete();
                   notificationService.showStudyCompleteNotification();
-                } catch (e) {
-                  // Ignore errors
-                }
+                } catch (e) {}
               };
               
               provider.onBreakActivityNeeded = () {
@@ -111,21 +81,15 @@ class MyApp extends StatelessWidget {
               };
               
               provider.onPause = () {
-                try {
-                  audioService.stopBackgroundMusic();
-                } catch (e) {
-                  // Ignore errors
-                }
+                try { audioService.stopBackgroundMusic(); } catch (e) {}
               };
               
               provider.onResume = () {
-                try {
-                  if (provider.currentType == SessionType.study) {
-                    audioService.playBackgroundMusic();
+                try { 
+                  if(provider.currentType == SessionType.study) { 
+                    audioService.playBackgroundMusic(); 
                   }
-                } catch (e) {
-                  // Ignore errors
-                }
+                } catch (e) {}
               };
               
               provider.onBreakStart = () {
@@ -147,18 +111,14 @@ class MyApp extends StatelessWidget {
                       progress: provider.progress,
                     );
                   }
-                } catch (e) {
-                  // Ignore errors
-                }
+                } catch (e) {}
               };
               
               provider.onBreakComplete = () {
                 try {
                   audioService.playBreakComplete();
                   notificationService.showBreakCompleteNotification();
-                } catch (e) {
-                  // Ignore errors
-                }
+                } catch (e) {}
               };
               
               provider.onCycleComplete = () async {
@@ -210,13 +170,9 @@ class MyApp extends StatelessWidget {
                       currentStreak: statsProvider.currentStreak,
                     );
                   }
-                } catch (e) {
-                  // Ignore errors
-                }
+                } catch (e) {}
               };
-            } catch (e) {
-              // Ignore errors
-            }
+            } catch (e) {}
             
             return provider;
           },
