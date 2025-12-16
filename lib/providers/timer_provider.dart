@@ -170,13 +170,7 @@ class TimerProvider with ChangeNotifier {
       notifyListeners();
       return;
     }
-
-    _currentSession = _currentSession!.copyWith(
-      currentType: SessionType.study,
-      completedCycles: completedCycles,
-      elapsedStudyTime: 0,
-    );
-    
+    _currentSession = _currentSession!.copyWith(currentType: SessionType.study,completedCycles: completedCycles,elapsedStudyTime: 0,);
     _saveSession();
     onStudyStart?.call();
     notifyListeners();
