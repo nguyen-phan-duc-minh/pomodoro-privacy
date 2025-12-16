@@ -119,10 +119,7 @@ class TimerProvider with ChangeNotifier {
   Future<void> stopSession() async {
     _timer?.cancel();
     if (_currentSession != null) {
-      _currentSession = _currentSession!.copyWith(
-        status: SessionStatus.completed,
-        endTime: DateTime.now(),
-      );
+      _currentSession = _currentSession!.copyWith(status: SessionStatus.completed,endTime: DateTime.now());
     }
     await _saveSession();
     _currentSession = null;
