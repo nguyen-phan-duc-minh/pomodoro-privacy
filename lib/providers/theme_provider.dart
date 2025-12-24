@@ -1,19 +1,22 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 import '../models/study_theme.dart';
+import '../core/interfaces.dart';
 
 class ThemeProvider with ChangeNotifier {
+  final IThemeRepository _repository;
   List<StudyTheme> _customThemes = [];
-  SharedPreferences? _prefs;
 
-  List<StudyTheme> get allThemes => [...StudyTheme.defaultThemes, ..._customThemes];
+  ThemeProvider(this._repository);
+
+  List<StudyTheme> get allThemes => [
+    ...StudyTheme.defaultThemes,
+    ..._customThemes,
+  ];
   List<StudyTheme> get customThemes => _customThemes;
   List<StudyTheme> get defaultThemes => StudyTheme.defaultThemes;
 
   Future<void> init() async {
-    _prefs = await SharedPreferences.getInstance();
     await _loadCustomThemes();
   }
 
@@ -64,26 +67,12 @@ class ThemeProvider with ChangeNotifier {
   }
 
   Future<void> _saveCustomThemes() async {
-    if (_prefs == null) return;
-    
-    final jsonList = _customThemes.map((theme) => theme.toJson()).toList();
-    await _prefs!.setString('custom_themes', jsonEncode(jsonList));
+    await _repository.saveCustomThemes(_customThemes);
   }
 
   Future<void> _loadCustomThemes() async {
-    if (_prefs == null) return;
-    
-    final json = _prefs!.getString('custom_themes');
-    if (json != null) {
-      try {
-        final List<dynamic> jsonList = jsonDecode(json);
-        _customThemes = jsonList
-            .map((item) => StudyTheme.fromJson(item))
-            .toList();
-        notifyListeners();
-      } catch (e) {
-        await _prefs!.remove('custom_themes');
-      }
-    }
+    final themesData = await _repository.loadCustomThemes();
+    _customThemes = themesData.map((json) => StudyTheme.fromJson(json as Map<String, dynamic>)).toList();
+    notifyListeners();
   }
 }

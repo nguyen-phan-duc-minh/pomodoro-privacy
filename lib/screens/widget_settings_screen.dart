@@ -12,10 +12,7 @@ class WidgetSettingsScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text(
           'Cài đặt Widget',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 20,
-          ),
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
         ),
         centerTitle: true,
       ),
@@ -24,7 +21,6 @@ class WidgetSettingsScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // Hướng dẫn thêm widget
             Card(
               child: Padding(
                 padding: const EdgeInsets.all(16),
@@ -75,8 +71,7 @@ class WidgetSettingsScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 16),
-            
-            // Thông tin widget hiển thị
+
             Card(
               child: Padding(
                 padding: const EdgeInsets.all(16),
@@ -96,19 +91,21 @@ class WidgetSettingsScreen extends StatelessWidget {
                     _buildInfoItem(Icons.palette, 'Tên theme đang dùng'),
                     _buildInfoItem(Icons.task_alt, 'Nhiệm vụ đang thực hiện'),
                     _buildInfoItem(Icons.emoji_events, 'Số Pomodoro hôm nay'),
-                    _buildInfoItem(Icons.local_fire_department, 'Streak hiện tại'),
+                    _buildInfoItem(
+                      Icons.local_fire_department,
+                      'Streak hiện tại',
+                    ),
                     _buildInfoItem(Icons.access_time, 'Tổng phút học hôm nay'),
                   ],
                 ),
               ),
             ),
             const SizedBox(height: 16),
-            
-            // Preview thống kê hiện tại
+
             Consumer<StatisticsProvider>(
               builder: (context, statsProvider, _) {
                 final todayStats = statsProvider.todayStats;
-                
+
                 return Card(
                   child: Padding(
                     padding: const EdgeInsets.all(16),
@@ -160,19 +157,18 @@ class WidgetSettingsScreen extends StatelessWidget {
               },
             ),
             const SizedBox(height: 16),
-            
-            // Nút cập nhật widget thủ công
+
             ElevatedButton.icon(
               onPressed: () async {
                 final statsProvider = context.read<StatisticsProvider>();
                 final todayStats = statsProvider.todayStats;
-                
+
                 await WidgetService.updateStatistics(
                   todayPomodoros: todayStats.completedCycles,
                   todayMinutes: todayStats.totalStudyMinutes,
                   currentStreak: statsProvider.currentStreak,
                 );
-                
+
                 if (context.mounted) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
@@ -191,10 +187,7 @@ class WidgetSettingsScreen extends StatelessWidget {
             const SizedBox(height: 8),
             Text(
               'Widget sẽ tự động cập nhật khi timer thay đổi',
-              style: TextStyle(
-                fontSize: 12,
-                color: Colors.grey[600],
-              ),
+              style: TextStyle(fontSize: 12, color: Colors.grey[600]),
               textAlign: TextAlign.center,
             ),
           ],
@@ -228,12 +221,7 @@ class WidgetSettingsScreen extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 12),
-          Expanded(
-            child: Text(
-              text,
-              style: const TextStyle(fontSize: 14),
-            ),
-          ),
+          Expanded(child: Text(text, style: const TextStyle(fontSize: 14))),
         ],
       ),
     );
@@ -246,10 +234,7 @@ class WidgetSettingsScreen extends StatelessWidget {
         children: [
           Icon(icon, size: 20, color: Colors.grey[700]),
           const SizedBox(width: 12),
-          Text(
-            text,
-            style: const TextStyle(fontSize: 14),
-          ),
+          Text(text, style: const TextStyle(fontSize: 14)),
         ],
       ),
     );
@@ -279,13 +264,7 @@ class WidgetSettingsScreen extends StatelessWidget {
               color: color,
             ),
           ),
-          Text(
-            label,
-            style: TextStyle(
-              fontSize: 10,
-              color: Colors.grey[600],
-            ),
-          ),
+          Text(label, style: TextStyle(fontSize: 10, color: Colors.grey[600])),
         ],
       ),
     );

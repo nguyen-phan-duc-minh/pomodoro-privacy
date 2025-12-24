@@ -13,10 +13,7 @@ class AchievementsScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text(
           'Huy hiệu',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 20,
-          ),
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
         ),
         centerTitle: true,
       ),
@@ -76,9 +73,9 @@ class AchievementsScreen extends StatelessWidget {
             padding: const EdgeInsets.symmetric(vertical: 12),
             child: Text(
               _getCategoryName(category),
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
+              style: Theme.of(
+                context,
+              ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
             ),
           ),
           ...categoryAchievements.map((achievement) {
@@ -94,7 +91,7 @@ class AchievementsScreen extends StatelessWidget {
                 currentValue = totalStudyMinutes;
                 break;
               case AchievementCategory.special:
-                currentValue = 0; 
+                currentValue = 0;
                 break;
               case AchievementCategory.general:
                 currentValue = 0;
@@ -165,8 +162,8 @@ class _AchievementCard extends StatelessWidget {
               height: 60,
               decoration: BoxDecoration(
                 color: isUnlocked
-                    ? const Color(0xFFFFD700) 
-                    : const Color(0xFF9E9E9E), 
+                    ? const Color(0xFFFFD700)
+                    : const Color(0xFF9E9E9E),
                 shape: BoxShape.circle,
                 boxShadow: isUnlocked
                     ? [
@@ -182,17 +179,13 @@ class _AchievementCard extends StatelessWidget {
                 child: isUnlocked
                     ? Text(
                         achievement.icon,
-                        style: const TextStyle(
-                          fontSize: 32,
-                        ),
+                        style: const TextStyle(fontSize: 32),
                       )
                     : Opacity(
                         opacity: 0.25,
                         child: Text(
                           achievement.icon,
-                          style: const TextStyle(
-                            fontSize: 32,
-                          ),
+                          style: const TextStyle(fontSize: 32),
                         ),
                       ),
               ),
@@ -213,10 +206,7 @@ class _AchievementCard extends StatelessWidget {
                   const SizedBox(height: 4),
                   Text(
                     achievement.description,
-                    style: TextStyle(
-                      fontSize: 13,
-                      color: Colors.grey.shade600,
-                    ),
+                    style: TextStyle(fontSize: 13, color: Colors.grey.shade600),
                   ),
                   if (!isUnlocked &&
                       achievement.category != AchievementCategory.special) ...[

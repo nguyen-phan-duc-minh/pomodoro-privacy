@@ -3,7 +3,7 @@ class Task {
   String title;
   bool completed;
   int pomodorosCompleted;
-  int studyMinutes; // Thời gian học thực tế (phút)
+  int studyMinutes;
   DateTime createdAt;
   DateTime? completedAt;
 
@@ -37,7 +37,9 @@ class Task {
       pomodorosCompleted: json['pomodorosCompleted'] ?? 0,
       studyMinutes: json['studyMinutes'] ?? 0,
       createdAt: DateTime.parse(json['createdAt']),
-      completedAt: json['completedAt'] != null ? DateTime.parse(json['completedAt']) : null,
+      completedAt: json['completedAt'] != null
+          ? DateTime.parse(json['completedAt'])
+          : null,
     );
   }
 

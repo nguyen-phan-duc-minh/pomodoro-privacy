@@ -78,19 +78,11 @@ class Achievement {
   }
 }
 
-enum AchievementCategory {
-  general,    // Thành tích chung
-  pomodoro,   // Liên quan đến số Pomodoro
-  streak,     // Liên quan đến streak
-  time,       // Liên quan đến thời gian học
-  special,    // Thành tích đặc biệt
-}
+enum AchievementCategory { general, pomodoro, streak, time, special }
 
-// Danh sách achievements mặc định
 class DefaultAchievements {
   static List<Achievement> getAll() {
     return [
-      // POMODORO ACHIEVEMENTS
       Achievement(
         id: 'first_pomodoro',
         title: 'Bắt đầu hành trình',
@@ -147,8 +139,6 @@ class DefaultAchievements {
         category: AchievementCategory.pomodoro,
         targetValue: 1000,
       ),
-
-      // STREAK ACHIEVEMENTS
       Achievement(
         id: 'streak_3',
         title: 'Khởi đầu tốt',
@@ -189,15 +179,13 @@ class DefaultAchievements {
         category: AchievementCategory.streak,
         targetValue: 100,
       ),
-
-      // TIME ACHIEVEMENTS
       Achievement(
         id: 'time_10h',
         title: 'Mốc đầu tiên',
         description: 'Học được 10 giờ',
         icon: '⏰',
         category: AchievementCategory.time,
-        targetValue: 600, // 10 giờ = 600 phút
+        targetValue: 600,
       ),
       Achievement(
         id: 'time_50h',
@@ -231,8 +219,6 @@ class DefaultAchievements {
         category: AchievementCategory.time,
         targetValue: 30000,
       ),
-
-      // SPECIAL ACHIEVEMENTS
       Achievement(
         id: 'early_bird',
         title: 'Chim sớm',

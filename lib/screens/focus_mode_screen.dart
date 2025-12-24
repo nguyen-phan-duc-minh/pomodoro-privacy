@@ -24,9 +24,11 @@ class _FocusModeScreenState extends State<FocusModeScreen> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        final timerProvider = Provider.of<TimerProvider>(context, listen: false);
-        
-        // Nếu đang chạy, hỏi trước khi thoát
+        final timerProvider = Provider.of<TimerProvider>(
+          context,
+          listen: false,
+        );
+
         if (timerProvider.isRunning || timerProvider.isPaused) {
           final shouldExit = await _showExitDialog(context);
           return shouldExit;
@@ -39,42 +41,29 @@ class _FocusModeScreenState extends State<FocusModeScreen> {
           onTap: _toggleControls,
           child: Stack(
             children: [
-              // Background gradient
               Container(
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
-                    colors: [
-                      Colors.black,
-                      Colors.grey.shade900,
-                      Colors.black,
-                    ],
+                    colors: [Colors.black, Colors.grey.shade900, Colors.black],
                   ),
                 ),
               ),
 
-              // Main content
               SafeArea(
                 child: Column(
                   children: [
-                    // Top bar - fade in/out
                     AnimatedOpacity(
                       opacity: _showControls ? 1.0 : 0.0,
                       duration: const Duration(milliseconds: 300),
                       child: _buildTopBar(context),
                     ),
 
-                    // Center timer
                     const Expanded(
-                      child: Center(
-                        child: TimerDisplay(
-                          focusMode: true,
-                        ),
-                      ),
+                      child: Center(child: TimerDisplay(focusMode: true)),
                     ),
 
-                    // Bottom controls - fade in/out
                     AnimatedOpacity(
                       opacity: _showControls ? 1.0 : 0.0,
                       duration: const Duration(milliseconds: 300),
@@ -84,7 +73,6 @@ class _FocusModeScreenState extends State<FocusModeScreen> {
                 ),
               ),
 
-              // Hint text when controls hidden
               if (!_showControls)
                 Positioned(
                   bottom: 40,
@@ -116,7 +104,6 @@ class _FocusModeScreenState extends State<FocusModeScreen> {
       padding: const EdgeInsets.all(16),
       child: Row(
         children: [
-          // Nút thoát Focus - nhỏ gọn
           OutlinedButton.icon(
             onPressed: () async {
               final shouldExit = await _showExitDialog(context);
@@ -144,7 +131,10 @@ class _FocusModeScreenState extends State<FocusModeScreen> {
                 return const SizedBox();
               }
               return Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 8,
+                ),
                 decoration: BoxDecoration(
                   color: Colors.white.withOpacity(0.1),
                   borderRadius: BorderRadius.circular(20),
@@ -172,19 +162,19 @@ class _FocusModeScreenState extends State<FocusModeScreen> {
             builder: (context, timerProvider, _) {
               final theme = timerProvider.selectedTheme;
               if (theme == null) return const SizedBox();
-              
+
               return Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 8,
+                ),
                 decoration: BoxDecoration(
                   color: Colors.white.withOpacity(0.1),
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Text(
                   theme.name,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 14,
-                  ),
+                  style: const TextStyle(color: Colors.white, fontSize: 14),
                 ),
               );
             },
@@ -308,16 +298,13 @@ class _FocusModeScreenState extends State<FocusModeScreen> {
   void _showStartDialog(BuildContext context, TimerProvider timerProvider) {
     final studyMinutes = timerProvider.selectedTheme?.studyMinutes ?? 25;
     final taskProvider = Provider.of<TaskProvider>(context, listen: false);
-    
+
     showDialog(
       context: context,
       builder: (dialogContext) => AlertDialog(
         title: const Text(
           'Bắt đầu học',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 20,
-          ),
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
         ),
         content: Column(
           mainAxisSize: MainAxisSize.min,
@@ -332,7 +319,13 @@ class _FocusModeScreenState extends State<FocusModeScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 for (int i = 1; i <= 4; i++) ...[
-                  _buildCycleButton(context, dialogContext, i, timerProvider, studyMinutes),
+                  _buildCycleButton(
+                    context,
+                    dialogContext,
+                    i,
+                    timerProvider,
+                    studyMinutes,
+                  ),
                   if (i < 4) const SizedBox(width: 16),
                 ],
               ],
@@ -407,9 +400,15 @@ class _FocusModeScreenState extends State<FocusModeScreen> {
     );
   }
 
-  Widget _buildCycleButton(BuildContext context, BuildContext dialogContext, int cycles, TimerProvider timerProvider, int studyMinutes) {
+  Widget _buildCycleButton(
+    BuildContext context,
+    BuildContext dialogContext,
+    int cycles,
+    TimerProvider timerProvider,
+    int studyMinutes,
+  ) {
     final totalStudyTime = cycles * studyMinutes;
-    
+
     return InkWell(
       onTap: () {
         timerProvider.startSession(targetCycles: cycles);
@@ -458,7 +457,9 @@ class _FocusModeScreenState extends State<FocusModeScreen> {
           'Reset phiên học',
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
         ),
-        content: const Text('Bạn có muốn reset phiên học về thời gian ban đầu?'),
+        content: const Text(
+          'Bạn có muốn reset phiên học về thời gian ban đầu?',
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),

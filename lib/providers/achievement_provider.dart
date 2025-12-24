@@ -1,12 +1,13 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../models/achievement.dart';
+import '../core/interfaces.dart';
 
 class AchievementProvider with ChangeNotifier {
+  final IAchievementRepository _repository;
   List<Achievement> _achievements = [];
-  SharedPreferences? _prefs;
   List<Achievement> _recentlyUnlocked = [];
+
+  AchievementProvider(this._repository);
 
   List<Achievement> get achievements => _achievements;
   List<Achievement> get unlockedAchievements =>
@@ -20,39 +21,26 @@ class AchievementProvider with ChangeNotifier {
   double get completionPercentage =>
       totalAchievements > 0 ? (unlockedCount / totalAchievements) : 0;
 
-  // Callback khi unlock achievement
   Function(Achievement)? onAchievementUnlocked;
 
   Future<void> init() async {
-    _prefs = await SharedPreferences.getInstance();
     await _loadAchievements();
   }
 
   Future<void> _loadAchievements() async {
-    if (_prefs == null) return;
-
-    final savedJson = _prefs!.getStringList('achievements');
+    final achievementsData = await _repository.loadAchievements();
+    _achievements = achievementsData.map((json) => Achievement.fromJson(json as Map<String, dynamic>)).toList();
     
-    if (savedJson == null || savedJson.isEmpty) {
-      // Lần đầu tiên, tạo achievements mặc định
+    if (_achievements.isEmpty) {
       _achievements = DefaultAchievements.getAll();
       await _saveAchievements();
-    } else {
-      _achievements = savedJson
-          .map((json) =>
-              Achievement.fromJson(jsonDecode(json) as Map<String, dynamic>))
-          .toList();
     }
 
     notifyListeners();
   }
 
   Future<void> _saveAchievements() async {
-    if (_prefs == null) return;
-
-    final json =
-        _achievements.map((a) => jsonEncode(a.toJson())).toList();
-    await _prefs!.setStringList('achievements', json);
+    await _repository.saveAchievements(_achievements);
   }
 
   Future<void> checkAndUnlockAchievements({
@@ -90,7 +78,6 @@ class AchievementProvider with ChangeNotifier {
           } else if (achievement.id == 'marathon') {
             shouldUnlock = todayPomodoros >= achievement.targetValue;
           } else if (achievement.id == 'weekend_warrior') {
-            // Cần implement logic kiểm tra học cả 2 ngày cuối tuần
             shouldUnlock = false;
           }
           break;

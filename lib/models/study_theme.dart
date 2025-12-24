@@ -75,53 +75,48 @@ class StudyTheme {
   }
 
   static StudyTheme get light => StudyTheme(
-        id: 'light',
-        name: 'Nhẹ',
-        studyMinutes: 20,
-        breakMinutes: 5,
-        isDefault: true,
-        studyColor: const Color(0xFFFF6B6B),
-        breakColor: const Color(0xFF4ECDC4),
-        backgroundColor: const Color(0xFFFFE66D),
-      );
+    id: 'light',
+    name: 'Nhẹ',
+    studyMinutes: 20,
+    breakMinutes: 5,
+    isDefault: true,
+    studyColor: const Color(0xFFFF6B6B),
+    breakColor: const Color(0xFF4ECDC4),
+    backgroundColor: const Color(0xFFFFE66D),
+  );
 
   static StudyTheme get medium => StudyTheme(
-        id: 'medium',
-        name: 'Vừa',
-        studyMinutes: 30,
-        breakMinutes: 5,
-        isDefault: true,
-        studyColor: const Color(0xFFFF8C42),
-        breakColor: const Color(0xFF95E1D3),
-        backgroundColor: const Color(0xFFFEA47F),
-      );
+    id: 'medium',
+    name: 'Vừa',
+    studyMinutes: 30,
+    breakMinutes: 5,
+    isDefault: true,
+    studyColor: const Color(0xFFFF8C42),
+    breakColor: const Color(0xFF95E1D3),
+    backgroundColor: const Color(0xFFFEA47F),
+  );
 
   static StudyTheme get average => StudyTheme(
-        id: 'average',
-        name: 'Trung bình',
-        studyMinutes: 45,
-        breakMinutes: 10,
-        isDefault: true,
-        studyColor: const Color(0xFFEE5A6F),
-        breakColor: const Color(0xFF92A8D1),
-        backgroundColor: const Color(0xFFF7B731),
-      );
+    id: 'average',
+    name: 'Trung bình',
+    studyMinutes: 45,
+    breakMinutes: 10,
+    isDefault: true,
+    studyColor: const Color(0xFFEE5A6F),
+    breakColor: const Color(0xFF92A8D1),
+    backgroundColor: const Color(0xFFF7B731),
+  );
 
   static StudyTheme get deep => StudyTheme(
-        id: 'deep',
-        name: 'Sâu',
-        studyMinutes: 60,
-        breakMinutes: 15,
-        isDefault: true,
-        studyColor: const Color(0xFF6C5CE7),
-        breakColor: const Color(0xFF00B894),
-        backgroundColor: const Color(0xFFFD79A8),
-      );
+    id: 'deep',
+    name: 'Sâu',
+    studyMinutes: 60,
+    breakMinutes: 15,
+    isDefault: true,
+    studyColor: const Color(0xFF6C5CE7),
+    breakColor: const Color(0xFF00B894),
+    backgroundColor: const Color(0xFFFD79A8),
+  );
 
-  static List<StudyTheme> get defaultThemes => [
-        light,
-        medium,
-        average,
-        deep,
-      ];
+  static List<StudyTheme> get defaultThemes => [light, medium, average, deep];
 }

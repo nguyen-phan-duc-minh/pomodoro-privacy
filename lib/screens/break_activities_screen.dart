@@ -34,10 +34,7 @@ class _BreakActivitiesScreenState extends State<BreakActivitiesScreen>
       appBar: AppBar(
         title: const Text(
           'Hoạt động giải lao',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 20,
-          ),
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
         ),
         centerTitle: true,
         bottom: TabBar(
@@ -73,7 +70,6 @@ class _BreakActivitiesScreenState extends State<BreakActivitiesScreen>
         final isBreak = timerProvider.currentType == SessionType.breakTime;
         final breakDuration = timerProvider.selectedTheme?.breakMinutes ?? 5;
 
-        // Nếu đang nghỉ và không có gợi ý, tạo gợi ý mới
         if (suggestion == null && isBreak) {
           WidgetsBinding.instance.addPostFrameCallback((_) {
             provider.suggestActivity(breakDuration);
@@ -85,18 +81,11 @@ class _BreakActivitiesScreenState extends State<BreakActivitiesScreen>
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(
-                  Icons.folder_open,
-                  size: 64,
-                  color: Colors.grey[400],
-                ),
+                Icon(Icons.folder_open, size: 64, color: Colors.grey[400]),
                 const SizedBox(height: 16),
                 Text(
                   'Chưa có hoạt động',
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.grey[600],
-                  ),
+                  style: TextStyle(fontSize: 16, color: Colors.grey[600]),
                 ),
               ],
             ),
@@ -105,10 +94,16 @@ class _BreakActivitiesScreenState extends State<BreakActivitiesScreen>
 
         return ListView.builder(
           padding: const EdgeInsets.all(16),
-          itemCount: activities.length + (isBreak && suggestion != null && suggestion.category == category ? 1 : 0),
+          itemCount:
+              activities.length +
+              (isBreak && suggestion != null && suggestion.category == category
+                  ? 1
+                  : 0),
           itemBuilder: (context, index) {
-            // Hiển thị gợi ý đầu tiên nếu đang nghỉ
-            if (isBreak && suggestion != null && suggestion.category == category && index == 0) {
+            if (isBreak &&
+                suggestion != null &&
+                suggestion.category == category &&
+                index == 0) {
               final count = stats[suggestion.id] ?? 0;
               return Card(
                 margin: const EdgeInsets.only(bottom: 12),
@@ -138,7 +133,11 @@ class _BreakActivitiesScreenState extends State<BreakActivitiesScreen>
                   ),
                   title: Row(
                     children: [
-                      const Icon(Icons.recommend, size: 16, color: Colors.orange),
+                      const Icon(
+                        Icons.recommend,
+                        size: 16,
+                        color: Colors.orange,
+                      ),
                       const SizedBox(width: 4),
                       const Text(
                         'Gợi ý cho bạn',
@@ -163,11 +162,7 @@ class _BreakActivitiesScreenState extends State<BreakActivitiesScreen>
                       const SizedBox(height: 8),
                       Row(
                         children: [
-                          Icon(
-                            Icons.timer,
-                            size: 14,
-                            color: Colors.grey[600],
-                          ),
+                          Icon(Icons.timer, size: 14, color: Colors.grey[600]),
                           const SizedBox(width: 4),
                           Text(
                             '${suggestion.durationMinutes} phút',
@@ -195,12 +190,13 @@ class _BreakActivitiesScreenState extends State<BreakActivitiesScreen>
                         ],
                       ),
                       const SizedBox(height: 12),
-                      // Hiển thị timer nếu đang chạy activity này
                       if (provider.runningActivity?.id == suggestion.id) ...[
                         Container(
                           padding: const EdgeInsets.all(12),
                           decoration: BoxDecoration(
-                            color: suggestion.getCategoryColor().withOpacity(0.2),
+                            color: suggestion.getCategoryColor().withOpacity(
+                              0.2,
+                            ),
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: Row(
@@ -235,23 +231,36 @@ class _BreakActivitiesScreenState extends State<BreakActivitiesScreen>
                                   provider.skipSuggestion(breakDuration);
                                 },
                                 icon: const Icon(Icons.skip_next, size: 16),
-                                label: const Text('Đổi khác', style: TextStyle(fontSize: 12)),
+                                label: const Text(
+                                  'Đổi khác',
+                                  style: TextStyle(fontSize: 12),
+                                ),
                                 style: OutlinedButton.styleFrom(
-                                  padding: const EdgeInsets.symmetric(vertical: 8),
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 8,
+                                  ),
                                 ),
                               ),
                             ),
                             const SizedBox(width: 8),
                             Expanded(
                               child: ElevatedButton.icon(
-                                onPressed: provider.isRunning ? null : () {
-                                  provider.startActivity(suggestion.id);
-                                },
+                                onPressed: provider.isRunning
+                                    ? null
+                                    : () {
+                                        provider.startActivity(suggestion.id);
+                                      },
                                 icon: const Icon(Icons.play_arrow, size: 16),
-                                label: const Text('Bắt đầu', style: TextStyle(fontSize: 12)),
+                                label: const Text(
+                                  'Bắt đầu',
+                                  style: TextStyle(fontSize: 12),
+                                ),
                                 style: ElevatedButton.styleFrom(
-                                  padding: const EdgeInsets.symmetric(vertical: 8),
-                                  backgroundColor: suggestion.getCategoryColor(),
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 8,
+                                  ),
+                                  backgroundColor: suggestion
+                                      .getCategoryColor(),
                                   foregroundColor: Colors.white,
                                 ),
                               ),
@@ -265,7 +274,10 @@ class _BreakActivitiesScreenState extends State<BreakActivitiesScreen>
               );
             }
 
-            final activityIndex = isBreak && suggestion != null && suggestion.category == category ? index - 1 : index;
+            final activityIndex =
+                isBreak && suggestion != null && suggestion.category == category
+                ? index - 1
+                : index;
             final activity = activities[activityIndex];
             final count = stats[activity.id] ?? 0;
 
@@ -301,11 +313,7 @@ class _BreakActivitiesScreenState extends State<BreakActivitiesScreen>
                     const SizedBox(height: 8),
                     Row(
                       children: [
-                        Icon(
-                          Icons.timer,
-                          size: 14,
-                          color: Colors.grey[600],
-                        ),
+                        Icon(Icons.timer, size: 14, color: Colors.grey[600]),
                         const SizedBox(width: 4),
                         Text(
                           '${activity.durationMinutes} phút',
@@ -332,11 +340,13 @@ class _BreakActivitiesScreenState extends State<BreakActivitiesScreen>
                         ],
                       ],
                     ),
-                    // Hiển thị timer nếu đang chạy
                     if (provider.runningActivity?.id == activity.id) ...[
                       const SizedBox(height: 12),
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 8,
+                        ),
                         decoration: BoxDecoration(
                           color: activity.getCategoryColor().withOpacity(0.2),
                           borderRadius: BorderRadius.circular(8),
@@ -361,20 +371,22 @@ class _BreakActivitiesScreenState extends State<BreakActivitiesScreen>
                 ),
                 trailing: isBreak
                     ? (provider.runningActivity?.id == activity.id
-                        ? IconButton(
-                            icon: const Icon(Icons.stop),
-                            color: Colors.red,
-                            onPressed: () {
-                              provider.stopActivity();
-                            },
-                          )
-                        : IconButton(
-                            icon: const Icon(Icons.play_arrow),
-                            color: activity.getCategoryColor(),
-                            onPressed: provider.isRunning ? null : () {
-                              provider.startActivity(activity.id);
-                            },
-                          ))
+                          ? IconButton(
+                              icon: const Icon(Icons.stop),
+                              color: Colors.red,
+                              onPressed: () {
+                                provider.stopActivity();
+                              },
+                            )
+                          : IconButton(
+                              icon: const Icon(Icons.play_arrow),
+                              color: activity.getCategoryColor(),
+                              onPressed: provider.isRunning
+                                  ? null
+                                  : () {
+                                      provider.startActivity(activity.id);
+                                    },
+                            ))
                     : null,
                 onTap: isBreak && !provider.isRunning
                     ? () {

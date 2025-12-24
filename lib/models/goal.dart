@@ -2,7 +2,7 @@ class Goal {
   final String id;
   final String title;
   final GoalType type;
-  final int targetMinutes; // Tổng thời gian học (phút)
+  final int targetMinutes; 
   final DateTime createdAt;
   final DateTime? completedAt;
   bool isActive;
@@ -50,16 +50,16 @@ class Goal {
   }
 
   factory Goal.fromJson(Map<String, dynamic> json) {
-    // Xử lý conversion từ targetPomodoros cũ sang targetMinutes mới
     int targetMins;
     if (json['targetMinutes'] != null) {
       targetMins = json['targetMinutes'] as int;
     } else if (json['targetPomodoros'] != null) {
-      targetMins = (json['targetPomodoros'] as int) * 25; // Convert pomodoros to minutes
+      targetMins =
+          (json['targetPomodoros'] as int) * 25; 
     } else {
-      targetMins = 120; // Default 2 hours
+      targetMins = 120; 
     }
-    
+
     return Goal(
       id: json['id'] as String,
       title: json['title'] as String,
@@ -76,28 +76,25 @@ class Goal {
     );
   }
 
-  // Tính % hoàn thành dựa trên thời gian học hiện tại (phút)
   double getProgress(int currentMinutes) {
     if (targetMinutes == 0) return 0;
     return (currentMinutes / targetMinutes).clamp(0.0, 1.0);
   }
 
-  // Kiểm tra xem goal đã hoàn thành chưa
   bool isCompleted(int currentMinutes) {
     return currentMinutes >= targetMinutes;
   }
 
-  // Tính số phút còn lại
   int getRemainingMinutes(int currentMinutes) {
     return (targetMinutes - currentMinutes).clamp(0, targetMinutes);
   }
 }
 
 enum GoalType {
-  daily,   // Mục tiêu hàng ngày
-  weekly,  // Mục tiêu hàng tuần
-  monthly, // Mục tiêu hàng tháng
-  custom,  // Mục tiêu tùy chỉnh
+  daily, 
+  weekly, 
+  monthly, 
+  custom, 
 }
 
 extension GoalTypeExtension on GoalType {

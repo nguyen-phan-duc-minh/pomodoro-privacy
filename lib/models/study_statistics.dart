@@ -53,7 +53,7 @@ class DailyStatistics {
 }
 
 class StudyStatistics {
-  Map<String, DailyStatistics> dailyStats; 
+  Map<String, DailyStatistics> dailyStats;
   int currentStreak;
   int longestStreak;
   DateTime? lastStudyDate;
@@ -73,7 +73,7 @@ class StudyStatistics {
     required String sessionId,
   }) {
     final dateKey = _dateKey(date);
-    
+
     if (dailyStats.containsKey(dateKey)) {
       final stats = dailyStats[dateKey]!;
       dailyStats[dateKey] = stats.copyWith(
@@ -109,7 +109,7 @@ class StudyStatistics {
   List<DailyStatistics> getWeeklyStats() {
     final now = DateTime.now();
     final weekAgo = now.subtract(const Duration(days: 7));
-    
+
     return List.generate(7, (index) {
       final date = weekAgo.add(Duration(days: index));
       final dateKey = _dateKey(date);
@@ -120,7 +120,7 @@ class StudyStatistics {
   List<DailyStatistics> getMonthlyStats() {
     final now = DateTime.now();
     final monthAgo = now.subtract(const Duration(days: 30));
-    
+
     return List.generate(30, (index) {
       final date = monthAgo.add(Duration(days: index));
       final dateKey = _dateKey(date);
@@ -136,18 +136,19 @@ class StudyStatistics {
 
     final today = DateTime.now();
     final yesterday = today.subtract(const Duration(days: 1));
-    
+
     final todayKey = _dateKey(today);
     final yesterdayKey = _dateKey(yesterday);
-    
-    if (!dailyStats.containsKey(todayKey) && !dailyStats.containsKey(yesterdayKey)) {
+
+    if (!dailyStats.containsKey(todayKey) &&
+        !dailyStats.containsKey(yesterdayKey)) {
       currentStreak = 0;
       return;
     }
 
     int streak = 0;
     DateTime checkDate = today;
-    
+
     while (true) {
       final key = _dateKey(checkDate);
       if (dailyStats.containsKey(key)) {
@@ -170,7 +171,9 @@ class StudyStatistics {
 
   Map<String, dynamic> toJson() {
     return {
-      'dailyStats': dailyStats.map((key, value) => MapEntry(key, value.toJson())),
+      'dailyStats': dailyStats.map(
+        (key, value) => MapEntry(key, value.toJson()),
+      ),
       'currentStreak': currentStreak,
       'longestStreak': longestStreak,
       'lastStudyDate': lastStudyDate?.toIso8601String(),
@@ -179,7 +182,8 @@ class StudyStatistics {
 
   factory StudyStatistics.fromJson(Map<String, dynamic> json) {
     return StudyStatistics(
-      dailyStats: (json['dailyStats'] as Map<String, dynamic>?)?.map(
+      dailyStats:
+          (json['dailyStats'] as Map<String, dynamic>?)?.map(
             (key, value) => MapEntry(key, DailyStatistics.fromJson(value)),
           ) ??
           {},

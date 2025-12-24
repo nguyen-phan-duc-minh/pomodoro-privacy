@@ -1,26 +1,36 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import '../core/interfaces.dart';
 import '../models/task.dart';
 
 class TaskProvider with ChangeNotifier {
+  final ITaskRepository _repository;
   List<Task> _tasks = [];
-  SharedPreferences? _prefs;
   String? _activeTaskId;
   Function(Task)? onTaskCompleted;
-  
+
+  TaskProvider(this._repository);
+
   List<Task> get tasks => _tasks;
   List<Task> get activeTasks => _tasks.where((t) => !t.completed).toList();
   List<Task> get completedTasks => _tasks.where((t) => t.completed).toList();
-  Task? get activeTask => _activeTaskId != null ? _tasks.firstWhere((t) => t.id == _activeTaskId, orElse: () => _tasks.first) : null;
+  Task? get activeTask => _activeTaskId != null
+      ? _tasks.firstWhere(
+          (t) => t.id == _activeTaskId,
+          orElse: () => _tasks.first,
+        )
+      : null;
 
   Future<void> init() async {
-    _prefs = await SharedPreferences.getInstance();
+    await _repository.init();
     await _loadTasks();
   }
 
   Future<void> addTask(String title) async {
-    final task = Task(id: DateTime.now().millisecondsSinceEpoch.toString(),title: title,createdAt: DateTime.now(),);
+    final task = Task(
+      id: DateTime.now().millisecondsSinceEpoch.toString(),
+      title: title,
+      createdAt: DateTime.now(),
+    );
     _tasks.insert(0, task);
     await _saveTasks();
     notifyListeners();
@@ -29,17 +39,25 @@ class TaskProvider with ChangeNotifier {
   Future<void> toggleTask(String taskId) async {
     final index = _tasks.indexWhere((t) => t.id == taskId);
     if (index != -1) {
-      _tasks[index] = _tasks[index].copyWith(completed: !_tasks[index].completed,completedAt: !_tasks[index].completed ? DateTime.now() : null,);
+      _tasks[index] = _tasks[index].copyWith(
+        completed: !_tasks[index].completed,
+        completedAt: !_tasks[index].completed ? DateTime.now() : null,
+      );
       await _saveTasks();
       notifyListeners();
     }
   }
-  
+
   Future<void> completeTask(String taskId) async {
     final index = _tasks.indexWhere((t) => t.id == taskId);
     if (index != -1 && !_tasks[index].completed) {
-      _tasks[index] = _tasks[index].copyWith(completed: true,completedAt: DateTime.now(),);
-      if (onTaskCompleted != null) {onTaskCompleted!(_tasks[index]); }
+      _tasks[index] = _tasks[index].copyWith(
+        completed: true,
+        completedAt: DateTime.now(),
+      );
+      if (onTaskCompleted != null) {
+        onTaskCompleted!(_tasks[index]);
+      }
       await _saveTasks();
       notifyListeners();
     }
@@ -47,7 +65,9 @@ class TaskProvider with ChangeNotifier {
 
   Future<void> deleteTask(String taskId) async {
     _tasks.removeWhere((t) => t.id == taskId);
-    if (_activeTaskId == taskId) {_activeTaskId = null;}
+    if (_activeTaskId == taskId) {
+      _activeTaskId = null;
+    }
     await _saveTasks();
     notifyListeners();
   }
@@ -63,11 +83,14 @@ class TaskProvider with ChangeNotifier {
 
   void setActiveTask(String? taskId) {
     _activeTaskId = taskId;
-    _prefs?.setString('active_task_id', taskId ?? '');
+    _repository.saveActiveTaskId(taskId);
     notifyListeners();
   }
 
-  Future<void> incrementTaskPomodoro(String taskId, {int studyMinutes = 25}) async {
+  Future<void> incrementTaskPomodoro(
+    String taskId, {
+    int studyMinutes = 25,
+  }) async {
     final index = _tasks.indexWhere((t) => t.id == taskId);
     if (index != -1) {
       _tasks[index] = _tasks[index].copyWith(
@@ -80,21 +103,13 @@ class TaskProvider with ChangeNotifier {
   }
 
   Future<void> _saveTasks() async {
-    if (_prefs == null) return;
-    final tasksJson = _tasks.map((t) => t.toJson()).toList();
-    await _prefs!.setString('tasks', jsonEncode(tasksJson));
+    await _repository.saveTasks(_tasks);
   }
 
   Future<void> _loadTasks() async {
-    if (_prefs == null) return;
-    final tasksString = _prefs!.getString('tasks');
-    if (tasksString != null) {
-      try {
-        final List<dynamic> tasksJson = jsonDecode(tasksString);
-        _tasks = tasksJson.map((json) => Task.fromJson(json)).toList();
-      } catch (e) {_tasks = [];}
-    }
-    _activeTaskId = _prefs!.getString('active_task_id');
+    final loaded = await _repository.loadTasks();
+    _tasks = List<Task>.from(loaded);
+    _activeTaskId = await _repository.loadActiveTaskId();
     notifyListeners();
   }
 

@@ -17,7 +17,6 @@ class _TasksScreenState extends State<TasksScreen> {
   @override
   void initState() {
     super.initState();
-    // Đăng ký callback khi task hoàn thành
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final taskProvider = Provider.of<TaskProvider>(context, listen: false);
       taskProvider.onTaskCompleted = (task) {
@@ -49,7 +48,7 @@ class _TasksScreenState extends State<TasksScreen> {
 
   Future<void> _deleteSelectedTasks(BuildContext context) async {
     final taskProvider = Provider.of<TaskProvider>(context, listen: false);
-    
+
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (dialogContext) => AlertDialog(
@@ -57,7 +56,9 @@ class _TasksScreenState extends State<TasksScreen> {
           'Xóa nhiệm vụ',
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
         ),
-        content: Text('Bạn có chắc muốn xóa ${_selectedTaskIds.length} nhiệm vụ đã chọn?'),
+        content: Text(
+          'Bạn có chắc muốn xóa ${_selectedTaskIds.length} nhiệm vụ đã chọn?',
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(dialogContext, false),
@@ -80,7 +81,7 @@ class _TasksScreenState extends State<TasksScreen> {
         await taskProvider.deleteTask(taskId);
       }
       _cancelSelection();
-      
+
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -97,23 +98,14 @@ class _TasksScreenState extends State<TasksScreen> {
       context: context,
       barrierDismissible: false,
       builder: (dialogContext) => AlertDialog(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         title: Column(
           children: [
-            Icon(
-              Icons.check_circle,
-              size: 64,
-              color: Colors.green,
-            ),
+            Icon(Icons.check_circle, size: 64, color: Colors.green),
             const SizedBox(height: 16),
             const Text(
               'Chúc mừng!',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 24,
-              ),
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
             ),
           ],
         ),
@@ -122,25 +114,22 @@ class _TasksScreenState extends State<TasksScreen> {
           children: [
             Text(
               'Bạn đã hoàn thành nhiệm vụ:',
-              style: TextStyle(
-                fontSize: 16,
-                color: Colors.grey.shade700,
-              ),
+              style: TextStyle(fontSize: 16, color: Colors.grey.shade700),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 12),
             Text(
               '"${task.title}"',
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               textAlign: TextAlign.center,
             ),
             if (task.pomodorosCompleted > 0) ...[
               const SizedBox(height: 12),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 8,
+                ),
                 decoration: BoxDecoration(
                   color: Colors.green.shade50,
                   borderRadius: BorderRadius.circular(12),
@@ -176,17 +165,17 @@ class _TasksScreenState extends State<TasksScreen> {
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.green,
                 foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 32,
+                  vertical: 12,
+                ),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
               ),
               child: const Text(
                 'OK',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
             ),
           ),
@@ -201,10 +190,7 @@ class _TasksScreenState extends State<TasksScreen> {
       appBar: AppBar(
         title: Text(
           _isSelectionMode ? '${_selectedTaskIds.length} đã chọn' : 'Nhiệm vụ',
-          style: const TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 20,
-          ),
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
         ),
         centerTitle: true,
         leading: _isSelectionMode
@@ -223,10 +209,12 @@ class _TasksScreenState extends State<TasksScreen> {
             : [
                 Consumer<TaskProvider>(
                   builder: (context, taskProvider, _) {
-                    if (taskProvider.completedTasks.isEmpty) return const SizedBox();
+                    if (taskProvider.completedTasks.isEmpty)
+                      return const SizedBox();
                     return IconButton(
                       icon: const Icon(Icons.delete_sweep),
-                      onPressed: () => _showClearCompletedDialog(context, taskProvider),
+                      onPressed: () =>
+                          _showClearCompletedDialog(context, taskProvider),
                       tooltip: 'Xóa đã hoàn thành',
                     );
                   },
@@ -240,26 +228,16 @@ class _TasksScreenState extends State<TasksScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(
-                    Icons.task_alt,
-                    size: 64,
-                    color: Colors.grey.shade400,
-                  ),
+                  Icon(Icons.task_alt, size: 64, color: Colors.grey.shade400),
                   const SizedBox(height: 16),
                   Text(
                     'Chưa có nhiệm vụ nào',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.grey.shade600,
-                    ),
+                    style: TextStyle(fontSize: 16, color: Colors.grey.shade600),
                   ),
                   const SizedBox(height: 8),
                   Text(
                     'Nhấn + để thêm nhiệm vụ',
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.grey.shade500,
-                    ),
+                    style: TextStyle(fontSize: 14, color: Colors.grey.shade500),
                   ),
                 ],
               ),
@@ -273,35 +251,39 @@ class _TasksScreenState extends State<TasksScreen> {
                 Text(
                   'Đang làm (${taskProvider.activeTasks.length})',
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 const SizedBox(height: 12),
-                ...taskProvider.activeTasks.map((task) => _TaskItem(
-                      task: task,
-                      isSelected: _selectedTaskIds.contains(task.id),
-                      isSelectionMode: _isSelectionMode,
-                      onSelectionToggle: () => _toggleSelection(task.id),
-                      onLongPress: () => _toggleSelection(task.id),
-                    )),
+                ...taskProvider.activeTasks.map(
+                  (task) => _TaskItem(
+                    task: task,
+                    isSelected: _selectedTaskIds.contains(task.id),
+                    isSelectionMode: _isSelectionMode,
+                    onSelectionToggle: () => _toggleSelection(task.id),
+                    onLongPress: () => _toggleSelection(task.id),
+                  ),
+                ),
                 const SizedBox(height: 24),
               ],
               if (taskProvider.completedTasks.isNotEmpty) ...[
                 Text(
                   'Hoàn thành (${taskProvider.completedTasks.length})',
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.grey.shade600,
-                      ),
+                    fontWeight: FontWeight.bold,
+                    color: Colors.grey.shade600,
+                  ),
                 ),
                 const SizedBox(height: 12),
-                ...taskProvider.completedTasks.map((task) => _TaskItem(
-                      task: task,
-                      isSelected: _selectedTaskIds.contains(task.id),
-                      isSelectionMode: _isSelectionMode,
-                      onSelectionToggle: () => _toggleSelection(task.id),
-                      onLongPress: () => _toggleSelection(task.id),
-                    )),
+                ...taskProvider.completedTasks.map(
+                  (task) => _TaskItem(
+                    task: task,
+                    isSelected: _selectedTaskIds.contains(task.id),
+                    isSelectionMode: _isSelectionMode,
+                    onSelectionToggle: () => _toggleSelection(task.id),
+                    onLongPress: () => _toggleSelection(task.id),
+                  ),
+                ),
               ],
             ],
           );
@@ -317,7 +299,7 @@ class _TasksScreenState extends State<TasksScreen> {
 
   void _showAddTaskDialog(BuildContext context) {
     final controller = TextEditingController();
-    
+
     showDialog(
       context: context,
       builder: (dialogContext) => AlertDialog(
@@ -334,7 +316,10 @@ class _TasksScreenState extends State<TasksScreen> {
           ),
           onSubmitted: (value) {
             if (value.trim().isNotEmpty) {
-              Provider.of<TaskProvider>(context, listen: false).addTask(value.trim());
+              Provider.of<TaskProvider>(
+                context,
+                listen: false,
+              ).addTask(value.trim());
               Navigator.pop(dialogContext);
             }
           },
@@ -347,7 +332,10 @@ class _TasksScreenState extends State<TasksScreen> {
           ElevatedButton(
             onPressed: () {
               if (controller.text.trim().isNotEmpty) {
-                Provider.of<TaskProvider>(context, listen: false).addTask(controller.text.trim());
+                Provider.of<TaskProvider>(
+                  context,
+                  listen: false,
+                ).addTask(controller.text.trim());
                 Navigator.pop(dialogContext);
               }
             },
@@ -358,7 +346,10 @@ class _TasksScreenState extends State<TasksScreen> {
     );
   }
 
-  void _showClearCompletedDialog(BuildContext context, TaskProvider taskProvider) {
+  void _showClearCompletedDialog(
+    BuildContext context,
+    TaskProvider taskProvider,
+  ) {
     showDialog(
       context: context,
       builder: (dialogContext) => AlertDialog(
@@ -366,7 +357,9 @@ class _TasksScreenState extends State<TasksScreen> {
           'Xóa nhiệm vụ đã hoàn thành',
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
         ),
-        content: Text('Xóa ${taskProvider.completedTasks.length} nhiệm vụ đã hoàn thành?'),
+        content: Text(
+          'Xóa ${taskProvider.completedTasks.length} nhiệm vụ đã hoàn thành?',
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(dialogContext),
@@ -414,7 +407,7 @@ class _TaskItem extends StatelessWidget {
       child: Container(
         margin: const EdgeInsets.only(bottom: 12),
         decoration: BoxDecoration(
-          color: isSelected 
+          color: isSelected
               ? Theme.of(context).colorScheme.primaryContainer.withOpacity(0.3)
               : Theme.of(context).colorScheme.surface,
           borderRadius: BorderRadius.circular(12),
@@ -422,8 +415,8 @@ class _TaskItem extends StatelessWidget {
             color: isSelected
                 ? Theme.of(context).colorScheme.primary
                 : (isActive
-                    ? Theme.of(context).colorScheme.primary
-                    : Colors.grey.shade300),
+                      ? Theme.of(context).colorScheme.primary
+                      : Colors.grey.shade300),
             width: isSelected ? 3 : (isActive ? 2 : 1),
           ),
         ),
@@ -437,12 +430,12 @@ class _TaskItem extends StatelessWidget {
                   ),
                 )
               : (task.completed
-                  ? const Icon(
-                      Icons.check_circle,
-                      color: Colors.green,
-                      size: 28,
-                    )
-                  : null),
+                    ? const Icon(
+                        Icons.check_circle,
+                        color: Colors.green,
+                        size: 28,
+                      )
+                    : null),
           onTap: isSelectionMode
               ? onSelectionToggle
               : () {
@@ -454,59 +447,56 @@ class _TaskItem extends StatelessWidget {
                     }
                   }
                 },
-        title: Text(
-          task.title,
-          style: TextStyle(
-            decoration: task.completed ? TextDecoration.lineThrough : null,
-            color: task.completed ? Colors.grey.shade500 : null,
-            fontWeight: isActive ? FontWeight.bold : FontWeight.normal,
-          ),
-        ),
-                subtitle: task.studyMinutes > 0
-            ? Text(
-                '⏱️ ${task.studyMinutes >= 60 ? "${(task.studyMinutes / 60).floor()}h${task.studyMinutes % 60 > 0 ? " ${task.studyMinutes % 60}p" : ""}" : "${task.studyMinutes}p"}',
-                style: TextStyle(
-                  fontSize: 12,
-                  color: Colors.grey.shade600,
-                ),
-              )
-            : null,
-        trailing: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            PopupMenuButton(
-              itemBuilder: (context) => [
-                const PopupMenuItem(
-                  value: 'edit',
-                  child: Row(
-                    children: [
-                      Icon(Icons.edit, size: 20),
-                      SizedBox(width: 8),
-                      Text('Sửa'),
-                    ],
-                  ),
-                ),
-                const PopupMenuItem(
-                  value: 'delete',
-                  child: Row(
-                    children: [
-                      Icon(Icons.delete, size: 20, color: Colors.red),
-                      SizedBox(width: 8),
-                      Text('Xóa', style: TextStyle(color: Colors.red)),
-                    ],
-                  ),
-                ),
-              ],
-              onSelected: (value) {
-                if (value == 'edit') {
-                  _showEditDialog(context, task);
-                } else if (value == 'delete') {
-                  taskProvider.deleteTask(task.id);
-                }
-              },
+          title: Text(
+            task.title,
+            style: TextStyle(
+              decoration: task.completed ? TextDecoration.lineThrough : null,
+              color: task.completed ? Colors.grey.shade500 : null,
+              fontWeight: isActive ? FontWeight.bold : FontWeight.normal,
             ),
-          ],
-        ),
+          ),
+          subtitle: task.studyMinutes > 0
+              ? Text(
+                  '⏱️ ${task.studyMinutes >= 60 ? "${(task.studyMinutes / 60).floor()}h${task.studyMinutes % 60 > 0 ? " ${task.studyMinutes % 60}p" : ""}" : "${task.studyMinutes}p"}',
+                  style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
+                )
+              : null,
+          trailing: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              PopupMenuButton(
+                itemBuilder: (context) => [
+                  const PopupMenuItem(
+                    value: 'edit',
+                    child: Row(
+                      children: [
+                        Icon(Icons.edit, size: 20),
+                        SizedBox(width: 8),
+                        Text('Sửa'),
+                      ],
+                    ),
+                  ),
+                  const PopupMenuItem(
+                    value: 'delete',
+                    child: Row(
+                      children: [
+                        Icon(Icons.delete, size: 20, color: Colors.red),
+                        SizedBox(width: 8),
+                        Text('Xóa', style: TextStyle(color: Colors.red)),
+                      ],
+                    ),
+                  ),
+                ],
+                onSelected: (value) {
+                  if (value == 'edit') {
+                    _showEditDialog(context, task);
+                  } else if (value == 'delete') {
+                    taskProvider.deleteTask(task.id);
+                  }
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -526,9 +516,7 @@ class _TaskItem extends StatelessWidget {
         content: TextField(
           controller: controller,
           autofocus: true,
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
-          ),
+          decoration: const InputDecoration(border: OutlineInputBorder()),
         ),
         actions: [
           TextButton(

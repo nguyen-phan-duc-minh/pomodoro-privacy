@@ -28,7 +28,8 @@ class _ThemeSelectionScreenState extends State<ThemeSelectionScreen> {
       if (!mounted) return;
       final timerProvider = Provider.of<TimerProvider>(context, listen: false);
       final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
-      if (timerProvider.selectedTheme == null && themeProvider.allThemes.isNotEmpty) {
+      if (timerProvider.selectedTheme == null &&
+          themeProvider.allThemes.isNotEmpty) {
         timerProvider.setTheme(themeProvider.allThemes.first);
       }
     });
@@ -38,17 +39,17 @@ class _ThemeSelectionScreenState extends State<ThemeSelectionScreen> {
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
     final timerProvider = Provider.of<TimerProvider>(context);
-    
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
         title: Text(
           'Chọn Theme Học',
           style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: Theme.of(context).colorScheme.onSurface,
-              ),
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            color: Theme.of(context).colorScheme.onSurface,
+          ),
         ),
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -88,7 +89,9 @@ class _ThemeSelectionScreenState extends State<ThemeSelectionScreen> {
                   end: Alignment.bottomRight,
                   colors: [
                     Theme.of(context).colorScheme.primary,
-                    Theme.of(context).colorScheme.primary.withValues(alpha: 0.7),
+                    Theme.of(
+                      context,
+                    ).colorScheme.primary.withValues(alpha: 0.7),
                   ],
                 ),
               ),
@@ -96,11 +99,14 @@ class _ThemeSelectionScreenState extends State<ThemeSelectionScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  Icon(Icons.timer_outlined,size: 48,color: Colors.white),
+                  Icon(Icons.timer_outlined, size: 48, color: Colors.white),
                   const SizedBox(height: 8),
                   Text(
                     'Pomodoro Study',
-                    style: TextStyle(color: Colors.white,fontSize: 24,fontWeight: FontWeight.bold,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
                 ],
@@ -132,18 +138,28 @@ class _ThemeSelectionScreenState extends State<ThemeSelectionScreen> {
               onTap: () {
                 Navigator.pop(context);
                 Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => const AchievementsScreen()),
+                  MaterialPageRoute(
+                    builder: (context) => const AchievementsScreen(),
+                  ),
                 );
               },
             ),
             ListTile(
               leading: const Icon(Icons.local_cafe, size: 28),
-              title: const Text('Hoạt động giải lao', style: TextStyle(fontSize: 16)),
-              subtitle: const Text('Gợi ý khi nghỉ', style: TextStyle(fontSize: 12)),
+              title: const Text(
+                'Hoạt động giải lao',
+                style: TextStyle(fontSize: 16),
+              ),
+              subtitle: const Text(
+                'Gợi ý khi nghỉ',
+                style: TextStyle(fontSize: 12),
+              ),
               onTap: () {
                 Navigator.pop(context);
                 Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => const BreakActivitiesScreen()),
+                  MaterialPageRoute(
+                    builder: (context) => const BreakActivitiesScreen(),
+                  ),
                 );
               },
             ),
@@ -154,18 +170,25 @@ class _ThemeSelectionScreenState extends State<ThemeSelectionScreen> {
               onTap: () {
                 Navigator.pop(context);
                 Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => const StatisticsScreen()),
+                  MaterialPageRoute(
+                    builder: (context) => const StatisticsScreen(),
+                  ),
                 );
               },
             ),
             ListTile(
               leading: const Icon(Icons.widgets, size: 28),
               title: const Text('Widgets', style: TextStyle(fontSize: 16)),
-              subtitle: const Text('Cài đặt widget', style: TextStyle(fontSize: 12)),
+              subtitle: const Text(
+                'Cài đặt widget',
+                style: TextStyle(fontSize: 12),
+              ),
               onTap: () {
                 Navigator.pop(context);
                 Navigator.of(context).push(
-                  MaterialPageRoute(builder: (context) => const WidgetSettingsScreen()),
+                  MaterialPageRoute(
+                    builder: (context) => const WidgetSettingsScreen(),
+                  ),
                 );
               },
             ),
@@ -198,55 +221,75 @@ class _ThemeSelectionScreenState extends State<ThemeSelectionScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                
                 Expanded(
                   child: ListView.builder(
                     itemCount: themeProvider.allThemes.length,
                     itemBuilder: (context, index) {
                       final theme = themeProvider.allThemes[index];
-                      final isSelected = timerProvider.selectedTheme?.id == theme.id;
-                      
+                      final isSelected =
+                          timerProvider.selectedTheme?.id == theme.id;
+
                       return Padding(
                         padding: const EdgeInsets.only(bottom: 12.0),
                         child: _ThemeCard(
                           theme: theme,
                           isSelected: isSelected,
-                          onTap: () {timerProvider.setTheme(theme);},
-                          onLongPress: theme.isDefault ? null : () => _showDeleteThemeDialog(context, theme),
+                          onTap: () {
+                            timerProvider.setTheme(theme);
+                          },
+                          onLongPress: theme.isDefault
+                              ? null
+                              : () => _showDeleteThemeDialog(context, theme),
                         ),
                       );
                     },
                   ),
                 ),
-                
+
                 const SizedBox(height: 16),
-                
+
                 SizedBox(
                   width: double.infinity,
                   height: 56,
                   child: ElevatedButton(
-                    onPressed: timerProvider.selectedTheme == null ? null : () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) => const TimerScreen()),
-                      );
-                    },
+                    onPressed: timerProvider.selectedTheme == null
+                        ? null
+                        : () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => const TimerScreen(),
+                              ),
+                            );
+                          },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Theme.of(context).colorScheme.primary,
                       foregroundColor: Theme.of(context).colorScheme.onPrimary,
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
                       elevation: 4,
-                      disabledBackgroundColor: Theme.of(context).colorScheme.surfaceContainerHighest,
-                      disabledForegroundColor: Theme.of(context).colorScheme.onSurfaceVariant,
+                      disabledBackgroundColor: Theme.of(
+                        context,
+                      ).colorScheme.surfaceContainerHighest,
+                      disabledForegroundColor: Theme.of(
+                        context,
+                      ).colorScheme.onSurfaceVariant,
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         const Text(
                           'Bắt đầu học',
-                          style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                         const SizedBox(width: 8),
-                        Icon(Icons.arrow_forward_rounded,color: Theme.of(context).colorScheme.onPrimary),
+                        Icon(
+                          Icons.arrow_forward_rounded,
+                          color: Theme.of(context).colorScheme.onPrimary,
+                        ),
                       ],
                     ),
                   ),
@@ -282,17 +325,31 @@ class _ThemeCard extends StatelessWidget {
         duration: const Duration(milliseconds: 200),
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
-          color: isSelected ? Theme.of(context).colorScheme.primaryContainer : Theme.of(context).colorScheme.surface,
+          color: isSelected
+              ? Theme.of(context).colorScheme.primaryContainer
+              : Theme.of(context).colorScheme.surface,
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
-            color: isSelected ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.outline.withValues(alpha: 0.2),
+            color: isSelected
+                ? Theme.of(context).colorScheme.primary
+                : Theme.of(context).colorScheme.outline.withValues(alpha: 0.2),
             width: isSelected ? 3 : 1.5,
           ),
           boxShadow: [
             if (isSelected)
-              BoxShadow(color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.3),blurRadius: 12,offset: const Offset(0, 4))
+              BoxShadow(
+                color: Theme.of(
+                  context,
+                ).colorScheme.primary.withValues(alpha: 0.3),
+                blurRadius: 12,
+                offset: const Offset(0, 4),
+              )
             else
-              BoxShadow(color: Colors.black.withValues(alpha: 0.05),blurRadius: 8,offset: const Offset(0, 2)),
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.05),
+                blurRadius: 8,
+                offset: const Offset(0, 2),
+              ),
           ],
         ),
         child: Row(
@@ -301,17 +358,27 @@ class _ThemeCard extends StatelessWidget {
               width: 24,
               height: 24,
               decoration: BoxDecoration(
-                color: isSelected ? Theme.of(context).colorScheme.primary : Colors.transparent,
+                color: isSelected
+                    ? Theme.of(context).colorScheme.primary
+                    : Colors.transparent,
                 border: Border.all(
-                  color: isSelected ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.outline,
+                  color: isSelected
+                      ? Theme.of(context).colorScheme.primary
+                      : Theme.of(context).colorScheme.outline,
                   width: 2,
                 ),
                 borderRadius: BorderRadius.circular(4),
               ),
-              child: isSelected ? Icon(Icons.check,color: Theme.of(context).colorScheme.onPrimary,size: 16) : null,
+              child: isSelected
+                  ? Icon(
+                      Icons.check,
+                      color: Theme.of(context).colorScheme.onPrimary,
+                      size: 16,
+                    )
+                  : null,
             ),
             const SizedBox(width: 16),
-            
+
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -320,13 +387,19 @@ class _ThemeCard extends StatelessWidget {
                     theme.name,
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
                       fontWeight: FontWeight.bold,
-                      color: isSelected ? Theme.of(context).colorScheme.onPrimaryContainer : Theme.of(context).colorScheme.onSurface,
+                      color: isSelected
+                          ? Theme.of(context).colorScheme.onPrimaryContainer
+                          : Theme.of(context).colorScheme.onSurface,
                     ),
                   ),
                   const SizedBox(height: 8),
                   Row(
                     children: [
-                      Icon(Icons.school_rounded,size: 18,color: theme.studyColor),
+                      Icon(
+                        Icons.school_rounded,
+                        size: 18,
+                        color: theme.studyColor,
+                      ),
                       const SizedBox(width: 4),
                       Text(
                         'Học: ${theme.studyMinutes}p',
@@ -334,19 +407,20 @@ class _ThemeCard extends StatelessWidget {
                           fontSize: 14,
                           fontWeight: FontWeight.w600,
                           color: isSelected
-                            ? Theme.of(context)
-                                .colorScheme
-                                .onPrimaryContainer
-                                .withOpacity(0.8)
-                            : Theme.of(context)
-                                .colorScheme
-                                .onSurface
-                                .withOpacity(0.7),
+                              ? Theme.of(context).colorScheme.onPrimaryContainer
+                                    .withOpacity(0.8)
+                              : Theme.of(
+                                  context,
+                                ).colorScheme.onSurface.withOpacity(0.7),
                         ),
                       ),
                       const SizedBox(width: 16),
-                      Icon(Icons.coffee_rounded,size: 18,color: theme.breakColor),
-                      
+                      Icon(
+                        Icons.coffee_rounded,
+                        size: 18,
+                        color: theme.breakColor,
+                      ),
+
                       const SizedBox(width: 4),
                       Text(
                         'Nghỉ: ${theme.breakMinutes}p',
@@ -354,14 +428,11 @@ class _ThemeCard extends StatelessWidget {
                           fontSize: 14,
                           fontWeight: FontWeight.w600,
                           color: isSelected
-                              ? Theme.of(context)
-                                  .colorScheme
-                                  .onPrimaryContainer
-                                  .withValues(alpha: 0.8)
-                              : Theme.of(context)
-                                  .colorScheme
-                                  .onSurface
-                                  .withValues(alpha: 0.7),
+                              ? Theme.of(context).colorScheme.onPrimaryContainer
+                                    .withValues(alpha: 0.8)
+                              : Theme.of(
+                                  context,
+                                ).colorScheme.onSurface.withValues(alpha: 0.7),
                         ),
                       ),
                     ],
@@ -369,7 +440,7 @@ class _ThemeCard extends StatelessWidget {
                 ],
               ),
             ),
-            
+
             if (!theme.isDefault)
               Row(
                 mainAxisSize: MainAxisSize.min,
@@ -413,18 +484,24 @@ void _showDeleteThemeDialog(BuildContext context, StudyTheme theme) {
         ),
         ElevatedButton(
           onPressed: () async {
-            final timerProvider = Provider.of<TimerProvider>(context, listen: false);
-            final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
-            
+            final timerProvider = Provider.of<TimerProvider>(
+              context,
+              listen: false,
+            );
+            final themeProvider = Provider.of<ThemeProvider>(
+              context,
+              listen: false,
+            );
+
             if (timerProvider.selectedTheme?.id == theme.id) {
               timerProvider.setTheme(StudyTheme.defaultThemes.first);
             }
-            
+
             await themeProvider.deleteCustomTheme(theme.id);
-            
+
             if (!dialogContext.mounted) return;
             Navigator.pop(dialogContext);
-            
+
             if (!context.mounted) return;
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
@@ -452,9 +529,13 @@ void _showDeleteThemeDialog(BuildContext context, StudyTheme theme) {
 
 void _showEditThemeDialog(BuildContext context, StudyTheme theme) {
   final nameController = TextEditingController(text: theme.name);
-  final studyController = TextEditingController(text: theme.studyMinutes.toString());
-  final breakController = TextEditingController(text: theme.breakMinutes.toString());
-  
+  final studyController = TextEditingController(
+    text: theme.studyMinutes.toString(),
+  );
+  final breakController = TextEditingController(
+    text: theme.breakMinutes.toString(),
+  );
+
   Color studyColor = theme.studyColor;
   Color breakColor = theme.breakColor;
   Color bgColor = theme.backgroundColor;
@@ -465,7 +546,7 @@ void _showEditThemeDialog(BuildContext context, StudyTheme theme) {
       builder: (context, setState) => AlertDialog(
         title: const Text(
           'Chỉnh sửa Theme',
-          style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20),
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
         ),
         content: SizedBox(
           width: double.maxFinite,
@@ -477,18 +558,27 @@ void _showEditThemeDialog(BuildContext context, StudyTheme theme) {
                 const SizedBox(height: 6),
                 TextField(
                   controller: nameController,
-                  decoration: const InputDecoration(labelText: 'Tên theme',border: OutlineInputBorder()),
+                  decoration: const InputDecoration(
+                    labelText: 'Tên theme',
+                    border: OutlineInputBorder(),
+                  ),
                 ),
                 const SizedBox(height: 16),
                 TextField(
                   controller: studyController,
-                  decoration: const InputDecoration(labelText: 'Thời gian học (phút)',border: OutlineInputBorder()),
+                  decoration: const InputDecoration(
+                    labelText: 'Thời gian học (phút)',
+                    border: OutlineInputBorder(),
+                  ),
                   keyboardType: TextInputType.number,
                 ),
                 const SizedBox(height: 16),
                 TextField(
                   controller: breakController,
-                  decoration: const InputDecoration(labelText: 'Thời gian nghỉ (phút)',border: OutlineInputBorder()),
+                  decoration: const InputDecoration(
+                    labelText: 'Thời gian nghỉ (phút)',
+                    border: OutlineInputBorder(),
+                  ),
                   keyboardType: TextInputType.number,
                 ),
                 const SizedBox(height: 20),
@@ -514,7 +604,10 @@ void _showEditThemeDialog(BuildContext context, StudyTheme theme) {
           ),
         ),
         actions: [
-          TextButton(onPressed: () => Navigator.of(dialogContext).pop(),child: const Text('Hủy')),
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop(),
+            child: const Text('Hủy'),
+          ),
           ElevatedButton(
             onPressed: () async {
               final name = nameController.text.trim();
@@ -527,7 +620,11 @@ void _showEditThemeDialog(BuildContext context, StudyTheme theme) {
                   SnackBar(
                     content: const Text('Vui lòng nhập đầy đủ thông tin!'),
                     behavior: SnackBarBehavior.floating,
-                    margin: EdgeInsets.only(top: MediaQuery.of(context).padding.top + 16,left: 16,right: 16),
+                    margin: EdgeInsets.only(
+                      top: MediaQuery.of(context).padding.top + 16,
+                      left: 16,
+                      right: 16,
+                    ),
                     duration: const Duration(seconds: 2),
                   ),
                 );
@@ -545,10 +642,18 @@ void _showEditThemeDialog(BuildContext context, StudyTheme theme) {
                 isDefault: false,
               );
 
-              final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
-              final timerProvider = Provider.of<TimerProvider>(context, listen: false);
+              final themeProvider = Provider.of<ThemeProvider>(
+                context,
+                listen: false,
+              );
+              final timerProvider = Provider.of<TimerProvider>(
+                context,
+                listen: false,
+              );
               await themeProvider.updateCustomTheme(updatedTheme);
-              if (timerProvider.selectedTheme?.id == theme.id) { timerProvider.setTheme(updatedTheme); }
+              if (timerProvider.selectedTheme?.id == theme.id) {
+                timerProvider.setTheme(updatedTheme);
+              }
 
               if (!dialogContext.mounted) return;
               Navigator.of(dialogContext).pop();
@@ -558,7 +663,11 @@ void _showEditThemeDialog(BuildContext context, StudyTheme theme) {
                 SnackBar(
                   content: const Text('Đã cập nhật theme!'),
                   behavior: SnackBarBehavior.floating,
-                  margin: EdgeInsets.only(top: MediaQuery.of(context).padding.top + 16,left: 16,right: 16),
+                  margin: EdgeInsets.only(
+                    top: MediaQuery.of(context).padding.top + 16,
+                    left: 16,
+                    right: 16,
+                  ),
                   duration: const Duration(seconds: 2),
                 ),
               );
@@ -575,7 +684,7 @@ void _showCreateThemeDialog(BuildContext context) {
   final nameController = TextEditingController();
   final studyController = TextEditingController(text: '25');
   final breakController = TextEditingController(text: '5');
-  
+
   Color studyColor = Colors.orange;
   Color breakColor = Colors.cyan;
   Color bgColor = Colors.grey.shade100;
@@ -595,71 +704,74 @@ void _showCreateThemeDialog(BuildContext context) {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-              const SizedBox(height: 6),
-              TextField(
-                controller: nameController,
-                decoration: const InputDecoration(
-                  labelText: 'Tên theme',
-                  border: OutlineInputBorder(),
+                const SizedBox(height: 6),
+                TextField(
+                  controller: nameController,
+                  decoration: const InputDecoration(
+                    labelText: 'Tên theme',
+                    border: OutlineInputBorder(),
+                  ),
                 ),
-              ),
-              const SizedBox(height: 16),
-              Row(
-                children: [
-                  Expanded(
-                    child: TextField(
-                      controller: studyController,
-                      keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(
-                        labelText: 'Học (phút)',
-                        border: OutlineInputBorder(),
+                const SizedBox(height: 16),
+                Row(
+                  children: [
+                    Expanded(
+                      child: TextField(
+                        controller: studyController,
+                        keyboardType: TextInputType.number,
+                        decoration: const InputDecoration(
+                          labelText: 'Học (phút)',
+                          border: OutlineInputBorder(),
+                        ),
                       ),
                     ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: TextField(
-                      controller: breakController,
-                      keyboardType: TextInputType.number,
-                      decoration: const InputDecoration(
-                        labelText: 'Nghỉ (phút)',
-                        border: OutlineInputBorder(),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: TextField(
+                        controller: breakController,
+                        keyboardType: TextInputType.number,
+                        decoration: const InputDecoration(
+                          labelText: 'Nghỉ (phút)',
+                          border: OutlineInputBorder(),
+                        ),
                       ),
                     ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 16),
-              _ColorPickerRow(
-                label: 'Màu học',
-                color: studyColor,
-                onColorChanged: (color) {
-                  setState(() => studyColor = color);
-                },
-              ),
-              const SizedBox(height: 10),
-              _ColorPickerRow(
-                label: 'Màu nghỉ',
-                color: breakColor,
-                onColorChanged: (color) {
-                  setState(() => breakColor = color);
-                },
-              ),
-              const SizedBox(height: 10),
-              _ColorPickerRow(
-                label: 'Màu nền',
-                color: bgColor,
-                onColorChanged: (color) {
-                  setState(() => bgColor = color);
-                },
-              ),
-              const SizedBox(height: 8),
-            ],
+                  ],
+                ),
+                const SizedBox(height: 16),
+                _ColorPickerRow(
+                  label: 'Màu học',
+                  color: studyColor,
+                  onColorChanged: (color) {
+                    setState(() => studyColor = color);
+                  },
+                ),
+                const SizedBox(height: 10),
+                _ColorPickerRow(
+                  label: 'Màu nghỉ',
+                  color: breakColor,
+                  onColorChanged: (color) {
+                    setState(() => breakColor = color);
+                  },
+                ),
+                const SizedBox(height: 10),
+                _ColorPickerRow(
+                  label: 'Màu nền',
+                  color: bgColor,
+                  onColorChanged: (color) {
+                    setState(() => bgColor = color);
+                  },
+                ),
+                const SizedBox(height: 8),
+              ],
+            ),
           ),
         ),
-      ),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(dialogContext),child: const Text('Hủy')),
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext),
+            child: const Text('Hủy'),
+          ),
           ElevatedButton(
             onPressed: () async {
               if (nameController.text.trim().isEmpty) {
@@ -667,7 +779,11 @@ void _showCreateThemeDialog(BuildContext context) {
                   SnackBar(
                     content: const Text('Vui lòng nhập tên theme'),
                     behavior: SnackBarBehavior.floating,
-                    margin: EdgeInsets.only(top: MediaQuery.of(context).padding.top + 16,left: 16,right: 16),
+                    margin: EdgeInsets.only(
+                      top: MediaQuery.of(context).padding.top + 16,
+                      left: 16,
+                      right: 16,
+                    ),
                     duration: const Duration(seconds: 2),
                   ),
                 );
@@ -677,32 +793,46 @@ void _showCreateThemeDialog(BuildContext context) {
               final studyMinutes = int.tryParse(studyController.text);
               final breakMinutes = int.tryParse(breakController.text);
 
-              if (studyMinutes == null || studyMinutes < 1 || studyMinutes > 120) {
+              if (studyMinutes == null ||
+                  studyMinutes < 1 ||
+                  studyMinutes > 120) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: const Text('Thời gian học phải từ 1-120 phút'),
                     behavior: SnackBarBehavior.floating,
-                    margin: EdgeInsets.only(top: MediaQuery.of(context).padding.top + 16,left: 16,right: 16),
+                    margin: EdgeInsets.only(
+                      top: MediaQuery.of(context).padding.top + 16,
+                      left: 16,
+                      right: 16,
+                    ),
                     duration: const Duration(seconds: 2),
                   ),
                 );
                 return;
               }
 
-              if (breakMinutes == null || breakMinutes < 1 || breakMinutes > 60) {
+              if (breakMinutes == null ||
+                  breakMinutes < 1 ||
+                  breakMinutes > 60) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: const Text('Thời gian nghỉ phải từ 1-60 phút'),
                     behavior: SnackBarBehavior.floating,
-                    margin: EdgeInsets.only(top: MediaQuery.of(context).padding.top + 16,left: 16,right: 16),
+                    margin: EdgeInsets.only(
+                      top: MediaQuery.of(context).padding.top + 16,
+                      left: 16,
+                      right: 16,
+                    ),
                     duration: const Duration(seconds: 2),
                   ),
                 );
                 return;
               }
 
-              await Provider.of<ThemeProvider>(context, listen: false)
-                  .addCustomTheme(
+              await Provider.of<ThemeProvider>(
+                context,
+                listen: false,
+              ).addCustomTheme(
                 name: nameController.text.trim(),
                 studyMinutes: studyMinutes,
                 breakMinutes: breakMinutes,
@@ -713,13 +843,17 @@ void _showCreateThemeDialog(BuildContext context) {
 
               if (!dialogContext.mounted) return;
               Navigator.of(dialogContext).pop();
-              
+
               if (context.mounted) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: const Text('Đã tạo theme mới!'),
                     behavior: SnackBarBehavior.floating,
-                    margin: EdgeInsets.only(top: MediaQuery.of(context).padding.top + 16,left: 16,right: 16),
+                    margin: EdgeInsets.only(
+                      top: MediaQuery.of(context).padding.top + 16,
+                      left: 16,
+                      right: 16,
+                    ),
                     duration: const Duration(seconds: 2),
                   ),
                 );
@@ -734,8 +868,11 @@ void _showCreateThemeDialog(BuildContext context) {
 }
 
 void _showAppThemeDialog(BuildContext context) {
-  final appThemeProvider = Provider.of<AppThemeProvider>(context, listen: false);
-  
+  final appThemeProvider = Provider.of<AppThemeProvider>(
+    context,
+    listen: false,
+  );
+
   showDialog(
     context: context,
     builder: (dialogContext) => Dialog(
@@ -748,7 +885,7 @@ void _showAppThemeDialog(BuildContext context) {
           children: [
             const Text(
               'Chọn Giao Diện',
-              style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 20),
             ...AppTheme.defaultThemes.map((theme) {
@@ -758,21 +895,33 @@ void _showAppThemeDialog(BuildContext context) {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(
-                    color: isSelected ? theme.primaryColor : Colors.grey.shade300,
+                    color: isSelected
+                        ? theme.primaryColor
+                        : Colors.grey.shade300,
                     width: isSelected ? 3 : 1,
                   ),
                 ),
                 child: ListTile(
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 4,
+                  ),
                   leading: CircleAvatar(
                     backgroundColor: theme.primaryColor,
-                    child: const Icon(Icons.palette,color: Colors.white),
+                    child: const Icon(Icons.palette, color: Colors.white),
                   ),
                   title: Text(
                     theme.name,
-                    style: TextStyle(fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,fontSize: 16),
+                    style: TextStyle(
+                      fontWeight: isSelected
+                          ? FontWeight.bold
+                          : FontWeight.normal,
+                      fontSize: 16,
+                    ),
                   ),
-                  trailing: isSelected ? const Icon(Icons.check_circle, color: Colors.green) : null,
+                  trailing: isSelected
+                      ? const Icon(Icons.check_circle, color: Colors.green)
+                      : null,
                   onTap: () {
                     appThemeProvider.setTheme(theme);
                     Navigator.of(dialogContext).pop();
@@ -839,7 +988,7 @@ class _ColorPickerRow extends StatelessWidget {
             padding: const EdgeInsets.only(left: 2),
             child: Text(
               label,
-              style: const TextStyle(fontWeight: FontWeight.bold,fontSize: 14),
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
             ),
           ),
           const SizedBox(height: 10),
@@ -850,22 +999,27 @@ class _ColorPickerRow extends StatelessWidget {
               ...colors.map((c) {
                 final isSelected = c.toARGB32() == color.toARGB32();
                 return GestureDetector(
-                onTap: () => onColorChanged(c),
-                child: Container(
-                  width: 36,
-                  height: 36,
-                  decoration: BoxDecoration(
-                    color: c,
-                    shape: BoxShape.circle,
-                    border: Border.all(color: isSelected ? Colors.black : Colors.transparent,width: 3),
+                  onTap: () => onColorChanged(c),
+                  child: Container(
+                    width: 36,
+                    height: 36,
+                    decoration: BoxDecoration(
+                      color: c,
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: isSelected ? Colors.black : Colors.transparent,
+                        width: 3,
+                      ),
+                    ),
+                    child: isSelected
+                        ? const Icon(Icons.check, color: Colors.white, size: 20)
+                        : null,
                   ),
-                  child: isSelected ? const Icon(Icons.check,color: Colors.white,size: 20) : null,
-                ),
-              );
-            }),
+                );
+              }),
             ],
-        ),
-      ],
+          ),
+        ],
       ),
     );
   }

@@ -6,11 +6,8 @@ import 'circular_timer_painter.dart';
 
 class TimerDisplay extends StatelessWidget {
   final bool focusMode;
-  
-  const TimerDisplay({
-    super.key,
-    this.focusMode = false,
-  });
+
+  const TimerDisplay({super.key, this.focusMode = false});
 
   String _formatTime(int seconds) {
     final minutes = seconds ~/ 60;
@@ -26,19 +23,20 @@ class TimerDisplay extends StatelessWidget {
         final theme = timerProvider.selectedTheme;
 
         if (theme == null) {
-          return const Center(
-            child: Text('Vui lòng chọn theme học'),
-          );
+          return const Center(child: Text('Vui lòng chọn theme học'));
         }
 
         final isStudyPhase = session?.currentType == SessionType.study;
-        final remainingTime = session != null ? timerProvider.remainingTime : theme.studyMinutes * 60;
+        final remainingTime = session != null
+            ? timerProvider.remainingTime
+            : theme.studyMinutes * 60;
         final studyProgress = session?.studyProgress ?? 0;
         final breakProgress = session?.breakProgress ?? 0;
 
-        // Focus mode: white text on dark background
-        final primaryColor = focusMode ? Colors.white : Theme.of(context).colorScheme.primary;
-        
+        final primaryColor = focusMode
+            ? Colors.white
+            : Theme.of(context).colorScheme.primary;
+
         return Container(
           padding: const EdgeInsets.all(20),
           child: Column(
@@ -50,20 +48,25 @@ class TimerDisplay extends StatelessWidget {
                     Text(
                       'Vòng ${session.completedCycles + 1}/${session.targetCycles}',
                       style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                            fontWeight: FontWeight.bold,
-                            color: primaryColor,
-                          ),
+                        fontWeight: FontWeight.bold,
+                        color: primaryColor,
+                      ),
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      isStudyPhase 
-                          ? 'HỌC' 
+                      isStudyPhase
+                          ? 'HỌC'
                           : (timerProvider.currentActivityName ?? 'NGHỈ'),
-                      style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                      style: Theme.of(context).textTheme.headlineSmall
+                          ?.copyWith(
                             fontWeight: FontWeight.bold,
-                            color: focusMode 
-                                ? (isStudyPhase ? Colors.orange : Colors.lightBlue)
-                                : (isStudyPhase ? theme.studyColor : theme.breakColor),
+                            color: focusMode
+                                ? (isStudyPhase
+                                      ? Colors.orange
+                                      : Colors.lightBlue)
+                                : (isStudyPhase
+                                      ? theme.studyColor
+                                      : theme.breakColor),
                             letterSpacing: timerProvider.hasActivity ? 1 : 2,
                           ),
                       textAlign: TextAlign.center,
@@ -93,10 +96,12 @@ class TimerDisplay extends StatelessWidget {
                     Text(
                       _formatTime(remainingTime),
                       style: Theme.of(context).textTheme.displayLarge?.copyWith(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 72,
-                            color: focusMode ? Colors.white : Theme.of(context).colorScheme.onSurface,
-                          ),
+                        fontWeight: FontWeight.bold,
+                        fontSize: 72,
+                        color: focusMode
+                            ? Colors.white
+                            : Theme.of(context).colorScheme.onSurface,
+                      ),
                     ),
                   ],
                 ),
@@ -125,7 +130,12 @@ class TimerDisplay extends StatelessWidget {
 
               const SizedBox(height: 30),
 
-              _buildProgressIndicators(context, theme, studyProgress, breakProgress),
+              _buildProgressIndicators(
+                context,
+                theme,
+                studyProgress,
+                breakProgress,
+              ),
             ],
           ),
         );
@@ -133,23 +143,25 @@ class TimerDisplay extends StatelessWidget {
     );
   }
 
-  Widget _buildLegend(BuildContext context, String label, Color color, String time) {
+  Widget _buildLegend(
+    BuildContext context,
+    String label,
+    Color color,
+    String time,
+  ) {
     return Row(
       children: [
         Container(
           width: 12,
           height: 12,
-          decoration: BoxDecoration(
-            color: color,
-            shape: BoxShape.circle,
-          ),
+          decoration: BoxDecoration(color: color, shape: BoxShape.circle),
         ),
         const SizedBox(width: 6),
         Text(
           '$label ($time)',
-          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                fontWeight: FontWeight.w600,
-              ),
+          style: Theme.of(
+            context,
+          ).textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600),
         ),
       ],
     );
@@ -184,9 +196,9 @@ class TimerDisplay extends StatelessWidget {
               Text(
                 '${(studyProgress * 100).toInt()}%',
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      fontWeight: FontWeight.bold,
-                      color: theme.studyColor,
-                    ),
+                  fontWeight: FontWeight.bold,
+                  color: theme.studyColor,
+                ),
               ),
             ],
           ),
@@ -210,9 +222,9 @@ class TimerDisplay extends StatelessWidget {
               Text(
                 '${(breakProgress * 100).toInt()}%',
                 style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      fontWeight: FontWeight.bold,
-                      color: theme.breakColor,
-                    ),
+                  fontWeight: FontWeight.bold,
+                  color: theme.breakColor,
+                ),
               ),
             ],
           ),

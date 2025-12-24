@@ -84,18 +84,13 @@ class TimerControls extends StatelessWidget {
       icon: Icon(icon, size: 28),
       label: Text(
         label,
-        style: const TextStyle(
-          fontSize: 18,
-          fontWeight: FontWeight.bold,
-        ),
+        style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
       ),
       style: ElevatedButton.styleFrom(
         backgroundColor: color,
         foregroundColor: Colors.white,
         padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(30),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
         elevation: 4,
       ),
     );
@@ -104,16 +99,13 @@ class TimerControls extends StatelessWidget {
   void _showStartDialog(BuildContext context, TimerProvider timerProvider) {
     final studyMinutes = timerProvider.selectedTheme?.studyMinutes ?? 25;
     final taskProvider = Provider.of<TaskProvider>(context, listen: false);
-    
+
     showDialog(
       context: context,
       builder: (dialogContext) => AlertDialog(
         title: const Text(
           'Bắt đầu học',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 20,
-          ),
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
         ),
         content: Column(
           mainAxisSize: MainAxisSize.min,
@@ -203,9 +195,14 @@ class TimerControls extends StatelessWidget {
     );
   }
 
-  Widget _buildCycleButton(BuildContext context, int cycles, TimerProvider timerProvider, int studyMinutes) {
+  Widget _buildCycleButton(
+    BuildContext context,
+    int cycles,
+    TimerProvider timerProvider,
+    int studyMinutes,
+  ) {
     final totalStudyTime = cycles * studyMinutes;
-    
+
     return InkWell(
       onTap: () {
         timerProvider.startSession(targetCycles: cycles);
@@ -254,7 +251,9 @@ class TimerControls extends StatelessWidget {
           'Reset phiên học',
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
         ),
-        content: const Text('Bạn có muốn reset phiên học về thời gian ban đầu?'),
+        content: const Text(
+          'Bạn có muốn reset phiên học về thời gian ban đầu?',
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),

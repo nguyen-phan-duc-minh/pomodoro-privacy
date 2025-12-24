@@ -41,10 +41,7 @@ class AppTheme {
         foregroundColor: textColor,
         elevation: 0,
       ),
-      cardTheme: CardThemeData(
-        color: surfaceColor,
-        elevation: 2,
-      ),
+      cardTheme: CardThemeData(color: surfaceColor, elevation: 2),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           backgroundColor: primaryColor,
@@ -99,53 +96,53 @@ class AppTheme {
   }
 
   static AppTheme get lightPastel => AppTheme(
-        id: 'light_pastel',
-        name: 'Light Pastel',
-        primaryColor: const Color(0xFFFFB6D9),
-        secondaryColor: const Color(0xFFD4A5FF),
-        backgroundColor: const Color(0xFFFFF5F8),
-        surfaceColor: const Color(0xFFFFFFFF),
-        textColor: const Color(0xFF2D2D2D),
-        isDefault: true,
-      );
+    id: 'light_pastel',
+    name: 'Light Pastel',
+    primaryColor: const Color(0xFFFFB6D9),
+    secondaryColor: const Color(0xFFD4A5FF),
+    backgroundColor: const Color(0xFFFFF5F8),
+    surfaceColor: const Color(0xFFFFFFFF),
+    textColor: const Color(0xFF2D2D2D),
+    isDefault: true,
+  );
 
   static AppTheme get darkNeon => AppTheme(
-        id: 'dark_neon',
-        name: 'Dark Neon',
-        primaryColor: const Color(0xFFFF006E),
-        secondaryColor: const Color(0xFF00F5FF),
-        backgroundColor: const Color(0xFF1A1A2E),
-        surfaceColor: const Color(0xFF16213E),
-        textColor: const Color(0xFFE4E4E4),
-        isDefault: true,
-      );
+    id: 'dark_neon',
+    name: 'Dark Neon',
+    primaryColor: const Color(0xFFFF006E),
+    secondaryColor: const Color(0xFF00F5FF),
+    backgroundColor: const Color(0xFF1A1A2E),
+    surfaceColor: const Color(0xFF16213E),
+    textColor: const Color(0xFFE4E4E4),
+    isDefault: true,
+  );
 
   static AppTheme get galaxy => AppTheme(
-        id: 'galaxy',
-        name: 'Galaxy',
-        primaryColor: const Color(0xFF8B5CF6),
-        secondaryColor: const Color(0xFFEC4899),
-        backgroundColor: const Color(0xFF0F172A),
-        surfaceColor: const Color(0xFF1E293B),
-        textColor: const Color(0xFFF1F5F9),
-        isDefault: true,
-      );
+    id: 'galaxy',
+    name: 'Galaxy',
+    primaryColor: const Color(0xFF8B5CF6),
+    secondaryColor: const Color(0xFFEC4899),
+    backgroundColor: const Color(0xFF0F172A),
+    surfaceColor: const Color(0xFF1E293B),
+    textColor: const Color(0xFFF1F5F9),
+    isDefault: true,
+  );
 
   static AppTheme get campus => AppTheme(
-        id: 'campus',
-        name: 'Campus',
-        primaryColor: const Color(0xFF059669),
-        secondaryColor: const Color(0xFFF59E0B),
-        backgroundColor: const Color(0xFFF0FDF4),
-        surfaceColor: const Color(0xFFFFFFFF),
-        textColor: const Color(0xFF064E3B),
-        isDefault: true,
-      );
+    id: 'campus',
+    name: 'Campus',
+    primaryColor: const Color(0xFF059669),
+    secondaryColor: const Color(0xFFF59E0B),
+    backgroundColor: const Color(0xFFF0FDF4),
+    surfaceColor: const Color(0xFFFFFFFF),
+    textColor: const Color(0xFF064E3B),
+    isDefault: true,
+  );
 
   static List<AppTheme> get defaultThemes => [
-        lightPastel,
-        darkNeon,
-        galaxy,
-        campus,
-      ];
+    lightPastel,
+    darkNeon,
+    galaxy,
+    campus,
+  ];
 }

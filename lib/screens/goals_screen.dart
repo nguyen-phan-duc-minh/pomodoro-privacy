@@ -38,7 +38,7 @@ class _GoalsScreenState extends State<GoalsScreen> {
 
   Future<void> _deleteSelectedGoals(BuildContext context) async {
     final goalProvider = Provider.of<GoalProvider>(context, listen: false);
-    
+
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (dialogContext) => AlertDialog(
@@ -46,7 +46,9 @@ class _GoalsScreenState extends State<GoalsScreen> {
           'Xóa mục tiêu',
           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
         ),
-        content: Text('Bạn có chắc muốn xóa ${_selectedGoalIds.length} mục tiêu đã chọn?'),
+        content: Text(
+          'Bạn có chắc muốn xóa ${_selectedGoalIds.length} mục tiêu đã chọn?',
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(dialogContext, false),
@@ -69,7 +71,7 @@ class _GoalsScreenState extends State<GoalsScreen> {
         await goalProvider.deleteGoal(goalId);
       }
       _cancelSelection();
-      
+
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -87,10 +89,7 @@ class _GoalsScreenState extends State<GoalsScreen> {
       appBar: AppBar(
         title: Text(
           _isSelectionMode ? '${_selectedGoalIds.length} đã chọn' : 'Mục tiêu',
-          style: const TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 20,
-          ),
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
         ),
         centerTitle: true,
         leading: _isSelectionMode
@@ -126,18 +125,12 @@ class _GoalsScreenState extends State<GoalsScreen> {
                   const SizedBox(height: 16),
                   Text(
                     'Chưa có mục tiêu nào',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.grey.shade600,
-                    ),
+                    style: TextStyle(fontSize: 16, color: Colors.grey.shade600),
                   ),
                   const SizedBox(height: 8),
                   Text(
                     'Nhấn + để thêm mục tiêu',
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.grey.shade500,
-                    ),
+                    style: TextStyle(fontSize: 14, color: Colors.grey.shade500),
                   ),
                 ],
               ),
@@ -151,42 +144,46 @@ class _GoalsScreenState extends State<GoalsScreen> {
                 Text(
                   'Đang thực hiện (${activeGoals.length})',
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 const SizedBox(height: 12),
-                ...activeGoals.map((goal) => _GoalCard(
-                      goal: goal,
-                      currentMinutes: goalProvider.getCurrentMinutes(
-                        goal,
-                        statsProvider.statistics.dailyStats,
-                      ),
-                      onCompleted: () => _showGoalCompletedDialog(context, goal),
-                      isSelected: _selectedGoalIds.contains(goal.id),
-                      isSelectionMode: _isSelectionMode,
-                      onSelectionToggle: () => _toggleSelection(goal.id),
-                      onLongPress: () => _toggleSelection(goal.id),
-                    )),
+                ...activeGoals.map(
+                  (goal) => _GoalCard(
+                    goal: goal,
+                    currentMinutes: goalProvider.getCurrentMinutes(
+                      goal,
+                      statsProvider.statistics.dailyStats,
+                    ),
+                    onCompleted: () => _showGoalCompletedDialog(context, goal),
+                    isSelected: _selectedGoalIds.contains(goal.id),
+                    isSelectionMode: _isSelectionMode,
+                    onSelectionToggle: () => _toggleSelection(goal.id),
+                    onLongPress: () => _toggleSelection(goal.id),
+                  ),
+                ),
                 const SizedBox(height: 24),
               ],
               if (completedGoals.isNotEmpty) ...[
                 Text(
                   'Hoàn thành (${completedGoals.length})',
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.grey.shade600,
-                      ),
+                    fontWeight: FontWeight.bold,
+                    color: Colors.grey.shade600,
+                  ),
                 ),
                 const SizedBox(height: 12),
-                ...completedGoals.map((goal) => _GoalCard(
-                      goal: goal,
-                      currentMinutes: goal.targetMinutes,
-                      isCompleted: true,
-                      isSelected: _selectedGoalIds.contains(goal.id),
-                      isSelectionMode: _isSelectionMode,
-                      onSelectionToggle: () => _toggleSelection(goal.id),
-                      onLongPress: () => _toggleSelection(goal.id),
-                    )),
+                ...completedGoals.map(
+                  (goal) => _GoalCard(
+                    goal: goal,
+                    currentMinutes: goal.targetMinutes,
+                    isCompleted: true,
+                    isSelected: _selectedGoalIds.contains(goal.id),
+                    isSelectionMode: _isSelectionMode,
+                    onSelectionToggle: () => _toggleSelection(goal.id),
+                    onLongPress: () => _toggleSelection(goal.id),
+                  ),
+                ),
               ],
             ],
           );
@@ -205,23 +202,14 @@ class _GoalsScreenState extends State<GoalsScreen> {
       context: context,
       barrierDismissible: false,
       builder: (dialogContext) => AlertDialog(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         title: Column(
           children: [
-            Icon(
-              Icons.celebration,
-              size: 64,
-              color: Colors.amber,
-            ),
+            Icon(Icons.celebration, size: 64, color: Colors.amber),
             const SizedBox(height: 16),
             const Text(
               'Chúc mừng!',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 24,
-              ),
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
             ),
           ],
         ),
@@ -230,19 +218,13 @@ class _GoalsScreenState extends State<GoalsScreen> {
           children: [
             Text(
               'Bạn đã hoàn thành mục tiêu:',
-              style: TextStyle(
-                fontSize: 16,
-                color: Colors.grey.shade700,
-              ),
+              style: TextStyle(fontSize: 16, color: Colors.grey.shade700),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 12),
             Text(
               '"${goal.title}"',
-              style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 12),
@@ -277,23 +259,26 @@ class _GoalsScreenState extends State<GoalsScreen> {
           Center(
             child: ElevatedButton(
               onPressed: () {
-                Provider.of<GoalProvider>(context, listen: false).completeGoal(goal.id);
+                Provider.of<GoalProvider>(
+                  context,
+                  listen: false,
+                ).completeGoal(goal.id);
                 Navigator.pop(dialogContext);
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.green,
                 foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 32,
+                  vertical: 12,
+                ),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
               ),
               child: const Text(
                 'OK',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
             ),
           ),
@@ -420,9 +405,10 @@ class _GoalCard extends StatelessWidget {
     final progress = goal.getProgress(currentMinutes);
     final remaining = goal.getRemainingMinutes(currentMinutes);
     final goalProvider = Provider.of<GoalProvider>(context, listen: false);
-    
-    // Kiểm tra nếu mới hoàn thành
-    if (!isCompleted && goal.isCompleted(currentMinutes) && onCompleted != null) {
+
+    if (!isCompleted &&
+        goal.isCompleted(currentMinutes) &&
+        onCompleted != null) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         onCompleted!();
       });
@@ -434,7 +420,7 @@ class _GoalCard extends StatelessWidget {
       child: Container(
         margin: const EdgeInsets.only(bottom: 12),
         decoration: BoxDecoration(
-          color: isSelected 
+          color: isSelected
               ? Theme.of(context).colorScheme.primaryContainer.withOpacity(0.3)
               : Theme.of(context).colorScheme.surface,
           borderRadius: BorderRadius.circular(12),
@@ -464,140 +450,150 @@ class _GoalCard extends StatelessWidget {
                       ),
                     ),
                   Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        goal.title,
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          decoration: isCompleted ? TextDecoration.lineThrough : null,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          goal.title,
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            decoration: isCompleted
+                                ? TextDecoration.lineThrough
+                                : null,
+                          ),
                         ),
-                      ),
-                      Text(
-                        goal.type.displayName,
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Colors.grey.shade600,
+                        Text(
+                          goal.type.displayName,
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Colors.grey.shade600,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-                if (!isCompleted)
-                  PopupMenuButton(
-                    itemBuilder: (context) => [
-                      const PopupMenuItem(
-                        value: 'edit',
-                        child: Row(
-                          children: [
-                            Icon(Icons.edit, size: 20),
-                            SizedBox(width: 8),
-                            Text('Sửa'),
-                          ],
-                        ),
-                      ),
-                      if (goal.isCompleted(currentMinutes))
+                  if (!isCompleted)
+                    PopupMenuButton(
+                      itemBuilder: (context) => [
                         const PopupMenuItem(
-                          value: 'complete',
+                          value: 'edit',
                           child: Row(
                             children: [
-                              Icon(Icons.check_circle, size: 20, color: Colors.green),
+                              Icon(Icons.edit, size: 20),
                               SizedBox(width: 8),
-                              Text('Hoàn thành'),
+                              Text('Sửa'),
                             ],
                           ),
                         ),
-                      const PopupMenuItem(
-                        value: 'delete',
-                        child: Row(
-                          children: [
-                            Icon(Icons.delete, size: 20, color: Colors.red),
-                            SizedBox(width: 8),
-                            Text('Xóa', style: TextStyle(color: Colors.red)),
-                          ],
+                        if (goal.isCompleted(currentMinutes))
+                          const PopupMenuItem(
+                            value: 'complete',
+                            child: Row(
+                              children: [
+                                Icon(
+                                  Icons.check_circle,
+                                  size: 20,
+                                  color: Colors.green,
+                                ),
+                                SizedBox(width: 8),
+                                Text('Hoàn thành'),
+                              ],
+                            ),
+                          ),
+                        const PopupMenuItem(
+                          value: 'delete',
+                          child: Row(
+                            children: [
+                              Icon(Icons.delete, size: 20, color: Colors.red),
+                              SizedBox(width: 8),
+                              Text('Xóa', style: TextStyle(color: Colors.red)),
+                            ],
+                          ),
+                        ),
+                      ],
+                      onSelected: (value) {
+                        if (value == 'edit') {
+                          _showEditDialog(context, goal);
+                        } else if (value == 'complete') {
+                          goalProvider.completeGoal(goal.id);
+                        } else if (value == 'delete') {
+                          goalProvider.deleteGoal(goal.id);
+                        }
+                      },
+                    ),
+                ],
+              ),
+              const SizedBox(height: 12),
+              Row(
+                children: [
+                  Text(
+                    '${(currentMinutes / 60).toStringAsFixed(1)}h / ${(goal.targetMinutes / 60).toStringAsFixed(1)}h',
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.grey.shade700,
+                    ),
+                  ),
+                  const Spacer(),
+                  Text(
+                    '${(progress * 100).toInt()}%',
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                      color: progress >= 1.0
+                          ? Colors.green
+                          : Theme.of(context).colorScheme.primary,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 8),
+              ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: LinearProgressIndicator(
+                  value: progress,
+                  minHeight: 8,
+                  backgroundColor: Colors.grey.shade200,
+                  valueColor: AlwaysStoppedAnimation(
+                    progress >= 1.0
+                        ? Colors.green
+                        : Theme.of(context).colorScheme.primary,
+                  ),
+                ),
+              ),
+              if (!isCompleted && remaining > 0)
+                Padding(
+                  padding: const EdgeInsets.only(top: 8),
+                  child: Text(
+                    'Còn ${(remaining / 60).toStringAsFixed(1)} giờ nữa!',
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: Colors.grey.shade600,
+                      fontStyle: FontStyle.italic,
+                    ),
+                  ),
+                ),
+              if (isCompleted && goal.completedAt != null)
+                Padding(
+                  padding: const EdgeInsets.only(top: 8),
+                  child: Row(
+                    children: [
+                      Icon(Icons.check_circle, size: 16, color: Colors.green),
+                      const SizedBox(width: 4),
+                      Text(
+                        'Hoàn thành',
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Colors.green,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
                     ],
-                    onSelected: (value) {
-                      if (value == 'edit') {
-                        _showEditDialog(context, goal);
-                      } else if (value == 'complete') {
-                        goalProvider.completeGoal(goal.id);
-                      } else if (value == 'delete') {
-                        goalProvider.deleteGoal(goal.id);
-                      }
-                    },
-                  ),
-              ],
-            ),
-            const SizedBox(height: 12),
-            Row(
-              children: [
-                Text(
-                  '${(currentMinutes / 60).toStringAsFixed(1)}h / ${(goal.targetMinutes / 60).toStringAsFixed(1)}h',
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.grey.shade700,
                   ),
                 ),
-                const Spacer(),
-                Text(
-                  '${(progress * 100).toInt()}%',
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                    color: progress >= 1.0 ? Colors.green : Theme.of(context).colorScheme.primary,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 8),
-            ClipRRect(
-              borderRadius: BorderRadius.circular(8),
-              child: LinearProgressIndicator(
-                value: progress,
-                minHeight: 8,
-                backgroundColor: Colors.grey.shade200,
-                valueColor: AlwaysStoppedAnimation(
-                  progress >= 1.0 ? Colors.green : Theme.of(context).colorScheme.primary,
-                ),
-              ),
-            ),
-            if (!isCompleted && remaining > 0)
-              Padding(
-                padding: const EdgeInsets.only(top: 8),
-                child: Text(
-                  'Còn ${(remaining / 60).toStringAsFixed(1)} giờ nữa!',
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: Colors.grey.shade600,
-                    fontStyle: FontStyle.italic,
-                  ),
-                ),
-              ),
-            if (isCompleted && goal.completedAt != null)
-              Padding(
-                padding: const EdgeInsets.only(top: 8),
-                child: Row(
-                  children: [
-                    Icon(Icons.check_circle, size: 16, color: Colors.green),
-                    const SizedBox(width: 4),
-                    Text(
-                      'Hoàn thành',
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: Colors.green,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-          ],
-        ),
+            ],
+          ),
         ),
       ),
     );

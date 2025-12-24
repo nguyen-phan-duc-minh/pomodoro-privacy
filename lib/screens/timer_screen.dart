@@ -21,23 +21,23 @@ class _TimerScreenState extends State<TimerScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final timerProvider = Provider.of<TimerProvider>(context, listen: false);
       final taskProvider = Provider.of<TaskProvider>(context, listen: false);
-      
-      // Set callback để gọi khi cycle complete
       final originalOnCycleComplete = timerProvider.onCycleComplete;
       timerProvider.onCycleComplete = () {
-        // Gọi callback gốc từ main.dart nếu có
         originalOnCycleComplete?.call();
-        
-        // Sau đó check task completion
+
         if (taskProvider.activeTask != null && mounted) {
           WidgetsBinding.instance.addPostFrameCallback((_) {
             if (mounted) {
-              _showTaskCompletionDialog(context, taskProvider.activeTask!, taskProvider);
+              _showTaskCompletionDialog(
+                context,
+                taskProvider.activeTask!,
+                taskProvider,
+              );
             }
           });
         }
       };
-      
+
       timerProvider.onBreakActivityNeeded = () {
         if (!mounted) return;
         _showBreakActivityDialog(context, timerProvider);
@@ -49,12 +49,15 @@ class _TimerScreenState extends State<TimerScreen> {
     BuildContext context,
     TimerProvider timerProvider,
   ) async {
-    final breakActivitiesProvider = Provider.of<BreakActivitiesProvider>(context, listen: false);
+    final breakActivitiesProvider = Provider.of<BreakActivitiesProvider>(
+      context,
+      listen: false,
+    );
     final breakDuration = timerProvider.selectedTheme?.breakMinutes ?? 5;
-    
-    // Lấy gợi ý cho mỗi category
-    final suggestions = breakActivitiesProvider.suggestActivitiesByCategory(breakDuration);
-    
+    final suggestions = breakActivitiesProvider.suggestActivitiesByCategory(
+      breakDuration,
+    );
+
     await showDialog(
       context: context,
       barrierDismissible: false,
@@ -74,7 +77,6 @@ class _TimerScreenState extends State<TimerScreen> {
                   style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
                 ),
                 const SizedBox(height: 16),
-                // Hiển thị các hoạt động theo category
                 ...suggestions.entries.map((entry) {
                   final activity = entry.value;
                   return Padding(
@@ -198,21 +200,14 @@ class _TimerScreenState extends State<TimerScreen> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-
             Text(
               '"${task.title}"',
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 16,
-              ),
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
             ),
             const SizedBox(height: 8),
             Text(
               '⏱ ${task.studyMinutes >= 60 ? "${(task.studyMinutes / 60).floor()}h${task.studyMinutes % 60 > 0 ? " ${task.studyMinutes % 60}p" : ""}" : "${task.studyMinutes}p"}',
-              style: TextStyle(
-                color: Colors.grey.shade600,
-                fontSize: 14,
-              ),
+              style: TextStyle(color: Colors.grey.shade600, fontSize: 14),
             ),
           ],
         ),
@@ -291,22 +286,20 @@ class _TimerScreenState extends State<TimerScreen> {
                         return IconButton(
                           icon: const Icon(Icons.arrow_back_rounded),
                           onPressed: () async {
-                            // Chỉ hiện dialog khi đang học (running hoặc paused)
-                            if (timerProvider.isRunning || timerProvider.isPaused) {
+                            if (timerProvider.isRunning ||
+                                timerProvider.isPaused) {
                               final shouldExit = await _showExitDialog(context);
                               if (shouldExit && context.mounted) {
                                 Navigator.of(context).pop();
                               }
                             } else {
-                              // Thoát bình thường khi chưa bắt đầu
                               Navigator.of(context).pop();
                             }
                           },
                           style: IconButton.styleFrom(
-                            backgroundColor: Theme.of(context)
-                                .colorScheme
-                                .surface
-                                .withValues(alpha: 0.5),
+                            backgroundColor: Theme.of(
+                              context,
+                            ).colorScheme.surface.withValues(alpha: 0.5),
                           ),
                         );
                       },
@@ -314,9 +307,8 @@ class _TimerScreenState extends State<TimerScreen> {
                     const Spacer(),
                     Consumer<TimerProvider>(
                       builder: (context, timerProvider, _) {
-                        // Chỉ hiện nút Focus Mode khi đang chạy
                         if (!timerProvider.isRunning) return const SizedBox();
-                        
+
                         return IconButton(
                           icon: const Icon(Icons.center_focus_strong),
                           iconSize: 28,
@@ -330,10 +322,9 @@ class _TimerScreenState extends State<TimerScreen> {
                           },
                           tooltip: 'Focus Mode',
                           style: IconButton.styleFrom(
-                            backgroundColor: Theme.of(context)
-                                .colorScheme
-                                .surface
-                                .withValues(alpha: 0.5),
+                            backgroundColor: Theme.of(
+                              context,
+                            ).colorScheme.surface.withValues(alpha: 0.5),
                           ),
                         );
                       },
@@ -343,7 +334,7 @@ class _TimerScreenState extends State<TimerScreen> {
                       builder: (context, timerProvider, child) {
                         final theme = timerProvider.selectedTheme;
                         if (theme == null) return const SizedBox.shrink();
-                        
+
                         return Container(
                           padding: const EdgeInsets.symmetric(
                             horizontal: 16,
@@ -380,9 +371,9 @@ class _TimerScreenState extends State<TimerScreen> {
                                 theme.name,
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .onPrimaryContainer,
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.onPrimaryContainer,
                                 ),
                               ),
                             ],
@@ -394,11 +385,7 @@ class _TimerScreenState extends State<TimerScreen> {
                 ),
               ),
 
-              const Expanded(
-                child: Center(
-                  child: TimerDisplay(),
-                ),
-              ),
+              const Expanded(child: Center(child: TimerDisplay())),
               const TimerControls(),
             ],
           ),

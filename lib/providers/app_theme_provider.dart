@@ -1,19 +1,19 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../models/app_theme.dart';
+import '../core/interfaces.dart';
 
 class AppThemeProvider with ChangeNotifier {
+  final IAppThemeRepository _repository;
   AppTheme _currentTheme = AppTheme.campus;
   List<AppTheme> _customThemes = [];
-  SharedPreferences? _prefs;
+
+  AppThemeProvider(this._repository);
 
   AppTheme get currentTheme => _currentTheme;
   List<AppTheme> get allThemes => [...AppTheme.defaultThemes, ..._customThemes];
   List<AppTheme> get customThemes => _customThemes;
 
   Future<void> init() async {
-    _prefs = await SharedPreferences.getInstance();
     await _loadTheme();
     await _loadCustomThemes();
   }
@@ -37,14 +37,11 @@ class AppThemeProvider with ChangeNotifier {
   }
 
   Future<void> _saveTheme() async {
-    if (_prefs == null) return;
-    await _prefs!.setString('current_theme_id', _currentTheme.id);
+    await _repository.saveSelectedTheme(_currentTheme.id);
   }
 
   Future<void> _loadTheme() async {
-    if (_prefs == null) return;
-    
-    final themeId = _prefs!.getString('current_theme_id');
+    final themeId = await _repository.loadSelectedTheme();
     if (themeId != null) {
       final theme = AppTheme.defaultThemes
           .where((t) => t.id == themeId)
@@ -57,32 +54,12 @@ class AppThemeProvider with ChangeNotifier {
   }
 
   Future<void> _saveCustomThemes() async {
-    if (_prefs == null) return;
-    
-    final jsonList = _customThemes.map((theme) => theme.toJson()).toList();
-    await _prefs!.setString('custom_app_themes', jsonEncode(jsonList));
+    // Custom themes are stored in the custom_themes table via ThemeRepository
+    // For now, we'll keep this empty as AppTheme doesn't have a custom themes table
   }
 
   Future<void> _loadCustomThemes() async {
-    if (_prefs == null) return;
-    
-    final json = _prefs!.getString('custom_app_themes');
-    if (json != null) {
-      try {
-        final List<dynamic> jsonList = jsonDecode(json);
-        _customThemes = jsonList.map((item) => AppTheme.fromJson(item)).toList();
-        
-        final customTheme = _customThemes
-            .where((t) => t.id == _currentTheme.id)
-            .firstOrNull;
-        if (customTheme != null) {
-          _currentTheme = customTheme;
-        }
-        
-        notifyListeners();
-      } catch (e) {
-        await _prefs!.remove('custom_app_themes');
-      }
-    }
+    // Load custom themes - for now empty as we focus on selected theme
+    notifyListeners();
   }
 }

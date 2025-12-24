@@ -7,10 +7,10 @@ class PomodoroSession {
   final String themeId;
   final DateTime startTime;
   DateTime? endTime;
-  final int studyDuration; 
-  final int breakDuration; 
-  int elapsedStudyTime; 
-  int elapsedBreakTime; 
+  final int studyDuration;
+  final int breakDuration;
+  int elapsedStudyTime;
+  int elapsedBreakTime;
   SessionType currentType;
   SessionStatus status;
   int completedCycles;

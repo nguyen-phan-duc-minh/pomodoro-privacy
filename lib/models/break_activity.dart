@@ -1,18 +1,13 @@
 import 'package:flutter/material.dart';
 
-enum ActivityCategory {
-  physical, // Vận động thể chất
-  mental, // Tinh thần, thư giãn
-  social, // Tương tác xã hội
-  creative, // Sáng tạo
-}
+enum ActivityCategory { physical, mental, social, creative }
 
 class BreakActivity {
   final String id;
   final String name;
   final String description;
   final IconData icon;
-  final int durationMinutes; // Thời gian gợi ý (phút)
+  final int durationMinutes;
   final ActivityCategory category;
 
   BreakActivity({
@@ -73,15 +68,11 @@ class BreakActivity {
   }
 }
 
-// Lịch sử hoạt động đã thực hiện
 class ActivityHistory {
   final String activityId;
   final DateTime completedAt;
 
-  ActivityHistory({
-    required this.activityId,
-    required this.completedAt,
-  });
+  ActivityHistory({required this.activityId, required this.completedAt});
 
   Map<String, dynamic> toJson() {
     return {
@@ -98,11 +89,9 @@ class ActivityHistory {
   }
 }
 
-// Danh sách hoạt động mặc định
 class DefaultActivities {
   static List<BreakActivity> getAll() {
     return [
-      // PHYSICAL - Vận động thể chất
       BreakActivity(
         id: 'stretch',
         name: 'Giãn cơ',
@@ -152,7 +141,6 @@ class DefaultActivities {
         category: ActivityCategory.physical,
       ),
 
-      // MENTAL - Thư giãn tinh thần
       BreakActivity(
         id: 'meditation',
         name: 'Thiền',
@@ -202,7 +190,6 @@ class DefaultActivities {
         category: ActivityCategory.mental,
       ),
 
-      // SOCIAL - Tương tác xã hội
       BreakActivity(
         id: 'chat',
         name: 'Trò chuyện',
@@ -236,7 +223,6 @@ class DefaultActivities {
         category: ActivityCategory.social,
       ),
 
-      // CREATIVE - Sáng tạo
       BreakActivity(
         id: 'draw',
         name: 'Vẽ doodle',
