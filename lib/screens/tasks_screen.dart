@@ -135,7 +135,7 @@ class _TasksScreenState extends State<TasksScreen> {
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Text(
-                  '🍅 ${task.pomodorosCompleted} Pomodoro',
+                  '${task.pomodorosCompleted} Pomodoro',
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
@@ -146,7 +146,7 @@ class _TasksScreenState extends State<TasksScreen> {
             ],
             const SizedBox(height: 16),
             Text(
-              'Tiếp tục phấn đấu nhé! 💪',
+              'Tiếp tục phấn đấu nhé!',
               style: TextStyle(
                 fontSize: 14,
                 color: Colors.grey.shade600,
@@ -457,7 +457,7 @@ class _TaskItem extends StatelessWidget {
           ),
           subtitle: task.studyMinutes > 0
               ? Text(
-                  '⏱️ ${task.studyMinutes >= 60 ? "${(task.studyMinutes / 60).floor()}h${task.studyMinutes % 60 > 0 ? " ${task.studyMinutes % 60}p" : ""}" : "${task.studyMinutes}p"}',
+                  'Time: ${task.studyMinutes >= 60 ? "${(task.studyMinutes / 60).floor()}h${task.studyMinutes % 60 > 0 ? " ${task.studyMinutes % 60}p" : ""}" : "${task.studyMinutes}p"}',
                   style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
                 )
               : null,
