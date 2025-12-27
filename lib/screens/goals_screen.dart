@@ -245,7 +245,7 @@ class _GoalsScreenState extends State<GoalsScreen> {
             ),
             const SizedBox(height: 16),
             Text(
-              'Tiếp tục phấn đấu nhé! 💪',
+              'Tiếp tục phấn đấu nhé!',
               style: TextStyle(
                 fontSize: 14,
                 color: Colors.grey.shade600,
@@ -340,7 +340,7 @@ class _GoalsScreenState extends State<GoalsScreen> {
                     labelText: 'Tổng thời gian học (giờ)',
                     hintText: 'Ví dụ: 4',
                     border: OutlineInputBorder(),
-                    suffixText: '⏰',
+                    suffixText: '',
                     helperText: '1 giờ = 60 phút',
                   ),
                 ),
@@ -629,7 +629,7 @@ class _GoalCard extends StatelessWidget {
               decoration: const InputDecoration(
                 labelText: 'Tổng thời gian học (giờ)',
                 border: OutlineInputBorder(),
-                suffixText: '⏰',
+                suffixText: '',
                 helperText: '1 giờ = 60 phút',
               ),
             ),

@@ -172,7 +172,7 @@ class WidgetSettingsScreen extends StatelessWidget {
                 if (context.mounted) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
-                      content: Text('Đã cập nhật widget! 📱'),
+                      content: Text('Đã cập nhật widget!'),
                       duration: Duration(seconds: 2),
                     ),
                   );

@@ -163,7 +163,7 @@ class TimerControls extends StatelessWidget {
                                   ),
                                   if (task.studyMinutes > 0)
                                     Text(
-                                      ' ⏱️${task.studyMinutes}p',
+                                      ' ${task.studyMinutes}p',
                                       style: TextStyle(
                                         fontSize: 12,
                                         color: Colors.grey.shade600,

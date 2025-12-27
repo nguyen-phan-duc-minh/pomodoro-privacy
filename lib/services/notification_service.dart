@@ -34,7 +34,7 @@ class NotificationService implements INotificationService {
   Future<void> showStudyStartNotification() async {
     await _showNotification(
       id: 1,
-      title: '🎯 Bắt đầu học',
+      title: 'Bắt đầu học',
       body: 'Hãy tập trung và học thật tốt!',
     );
   }
@@ -42,7 +42,7 @@ class NotificationService implements INotificationService {
   Future<void> showStudyCompleteNotification() async {
     await _showNotification(
       id: 2,
-      title: '✅ Hoàn thành học',
+      title: 'Hoàn thành học',
       body: 'Tuyệt vời! Giờ nghỉ ngơi thôi.',
     );
   }
@@ -50,7 +50,7 @@ class NotificationService implements INotificationService {
   Future<void> showBreakStartNotification() async {
     await _showNotification(
       id: 3,
-      title: '☕ Giờ nghỉ',
+      title: 'Giờ nghỉ',
       body: 'Thư giãn và nạp lại năng lượng!',
     );
   }
@@ -58,7 +58,7 @@ class NotificationService implements INotificationService {
   Future<void> showBreakCompleteNotification() async {
     await _showNotification(
       id: 4,
-      title: '🔔 Hết giờ nghỉ',
+      title: 'Hết giờ nghỉ',
       body: 'Sẵn sàng cho phiên học tiếp theo!',
     );
   }
@@ -66,7 +66,7 @@ class NotificationService implements INotificationService {
   Future<void> showCycleCompleteNotification(int cycles) async {
     await _showNotification(
       id: 5,
-      title: '🎉 Hoàn thành!',
+      title: 'Hoàn thành!',
       body: 'Bạn đã hoàn thành $cycles vòng Pomodoro!',
     );
   }
